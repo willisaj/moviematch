@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="genres">
+        <item>Comedy</item>
+        <item>Sci-fi</item>
+        <item>Action</item>
+        <item>Thriller</item>
+        <item>Horror</item>
+        <item>Romance</item>
+        <item>Teen</item>
+        <item>Animation</item>
+        <item>Foreign</item>
+        <item>Zombie Comedy</item>
+        <item>Andventure</item>
+        <item>Crime</item>
+        <item>Fantasy</item>
+        <item>Historical</item>
+        <item>Documentary</item>
+        <item>Mystery</item>
+        <item>Sports</item>
+        <item>Politics</item>
+        <item>Children</item>
+    </string-array>
+    <string-array name="distributions">
+        <item>In Theatres</item>
+        <item>RedBox</item>
+        <item>Amazon</item>
+        <item>YouTube</item>
+        <item>Hulu</item>
+        <item>Netflix</item>
+        <item>iTunes</item>
+        <item>Google Play</item>
+    </string-array>
+
+</resources>
