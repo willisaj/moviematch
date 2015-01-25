@@ -65,7 +65,7 @@
             android:text="@string/my_rating" />
 
         <RatingBar
-            android:id="@+id/ratingBar1"
+            android:id="@+id/ratingBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/rottenLabel"
@@ -76,7 +76,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_below="@id/myRatingLabel"
+            android:layout_below="@id/ratingBar"
             android:text="@string/error" />
 
         <TextView
@@ -92,7 +92,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/description"
-            android:layout_toLeftOf="@id/lengthLabel"
+            android:layout_toRightOf="@id/lengthLabel"
             android:text="@string/error" />
 
         <TextView
@@ -108,7 +108,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/lengthLabel"
-            android:layout_toLeftOf="@id/mpaaLabel"
+            android:layout_toRightOf="@id/mpaaLabel"
             android:text="@string/error" />
 
         <Button
