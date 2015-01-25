@@ -1,0 +1,123 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scrollView1"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <ImageView
+            android:id="@+id/moviePortrait"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:contentDescription="@string/error"
+            android:src="@drawable/ic_launcher" />
+
+        <TextView
+            android:id="@+id/posterCaptionTitleView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/moviePortrait"
+            android:layout_centerHorizontal="true"
+            android:text="@string/error" />
+
+        <TextView
+            android:id="@+id/rottenRating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/posterCaptionTitleView"
+            android:text="@string/error" />
+
+        <TextView
+            android:id="@+id/rottenLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/posterCaptionTitleView"
+            android:layout_toRightOf="@id/rottenRating"
+            android:text="@string/rotten" />
+
+        <TextView
+            android:id="@+id/metacriticRating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/posterCaptionTitleView"
+            android:layout_toRightOf="@id/rottenLabel"
+            android:text="@string/error" />
+
+        <TextView
+            android:id="@+id/metacriticLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/posterCaptionTitleView"
+            android:layout_toRightOf="@id/metacriticRating"
+            android:text="@string/metacritic" />
+
+        <TextView
+            android:id="@+id/myRatingLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/rottenLabel"
+            android:text="@string/my_rating" />
+
+        <RatingBar
+            android:id="@+id/ratingBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rottenLabel"
+            android:layout_toRightOf="@id/myRatingLabel" />
+
+        <TextView
+            android:id="@+id/description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/ratingBar"
+            android:text="@string/error" />
+
+        <TextView
+            android:id="@+id/lengthLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/description"
+            android:text="@string/length" />
+
+        <TextView
+            android:id="@+id/lengthTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/description"
+            android:layout_toRightOf="@id/lengthLabel"
+            android:text="@string/error" />
+
+        <TextView
+            android:id="@+id/mpaaLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/lengthLabel"
+            android:text="@string/rating" />
+
+        <TextView
+            android:id="@+id/mpaaTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/lengthLabel"
+            android:layout_toRightOf="@id/mpaaLabel"
+            android:text="@string/error" />
+
+        <Button
+            android:id="@+id/wishListButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/mpaaLabel"
+            android:layout_centerHorizontal="true"
+            android:text="@string/error" />
+    </RelativeLayout>
+
+</ScrollView>

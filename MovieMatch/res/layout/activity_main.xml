@@ -5,26 +5,32 @@
     android:orientation="vertical"
     tools:context="${relativePackage}.${activityClass}" >
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
-
     <Button
         android:id="@+id/recommend_movie_button"
         android:layout_width="275dp"
         android:layout_height="75dp"
+        android:layout_gravity="center_horizontal"
         android:text="@string/find_me_movies" />
 
-    <Spinner
-        android:id="@+id/actor_spinner"
+    <EditText
+        android:id="@+id/actor_editText"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/actor_hint"
+        android:imeOptions="actionNone"
+        android:inputType="text" >
+    </EditText>
 
-    <Spinner
-        android:id="@+id/director_spinner"
+    <EditText
+        android:id="@+id/director_editText"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/director_hint"
+        android:imeOptions="actionNone"
+        android:inputType="text" >
+    </EditText>
 
     <Spinner
         android:id="@+id/genre_spinner"
@@ -35,5 +41,11 @@
         android:id="@+id/distribution_spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/wishlist_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/wishlist" />
 
 </LinearLayout>

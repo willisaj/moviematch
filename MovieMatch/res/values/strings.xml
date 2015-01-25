@@ -7,5 +7,15 @@
     <string name="todo">TO DO</string>
     <string name="find_me_movies">Find Me Movies!</string>
     <string name="title_activity_movie_list">ERROR!!!</string>
+    <string name="title_activity_movie_profile">ERROR!!!</string>
+    <string name="error">ERROR!!!</string>
+    <string name="metacritic">Metacritic</string>
+    <string name="rotten">Rotten\nTomatoes</string>
+    <string name="length">Length:</string>
+    <string name="rating">MPAA Rating:</string>
+    <string name="my_rating">My Rating:</string>
+    <string name="wishlist">Wish List</string>
+    <string name="actor_hint">Enter the name of an actor you like</string>
+    <string name="director_hint">Enter the name of a director you like</string>
 
 </resources>

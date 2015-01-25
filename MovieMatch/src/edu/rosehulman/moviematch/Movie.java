@@ -1,5 +1,6 @@
 package edu.rosehulman.moviematch;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.os.Parcel;
@@ -7,15 +8,40 @@ import android.os.Parcelable;
 
 public class Movie implements Parcelable {
 
+	public static final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>() {
+
+		@Override
+		public Movie createFromParcel(Parcel source) {
+			return new Movie(source);
+		}
+
+		@Override
+		public Movie[] newArray(int size) {
+			return new Movie[size];
+		}
+
+	};
+
 	private String mTitle;
 	private String mDirector;
 	private List<String> mActors;
 	private List<String> mGenres;
 
-	private Movie(Parcel in) {
+	protected Movie(Parcel in) {
 		mTitle = in.readString();
 		mDirector = in.readString();
-		// mActors = in.readArray(loader)
+		mActors = new ArrayList<String>();
+		mGenres = new ArrayList<String>();
+		in.readStringList(mGenres);
+		in.readStringList(mActors);
+	}
+
+	public Movie(String title, String director, ArrayList<String> actors,
+			ArrayList<String> genres) {
+		mTitle = title;
+		mDirector = director;
+		mActors = actors;
+		mGenres = genres;
 	}
 
 	public String getTitle() {
@@ -64,8 +90,8 @@ public class Movie implements Parcelable {
 	public void writeToParcel(Parcel dest, int flags) {
 		dest.writeString(mTitle);
 		dest.writeString(mDirector);
-		dest.writeArray(mGenres.toArray());
-		dest.writeArray(mActors.toArray());
+		dest.writeStringList(mGenres);
+		dest.writeStringList(mActors);
 
 	}
 
@@ -90,5 +116,19 @@ public class Movie implements Parcelable {
 		// TODO figure out how to implement
 		return null;
 	}
+
+	// public class MovieCreator implements Parcelable.Creator<Movie> {
+	//
+	// @Override
+	// public Movie createFromParcel(Parcel source) {
+	// return new Movie(source);
+	// }
+	//
+	// @Override
+	// public Movie[] newArray(int size) {
+	// return new Movie[size];
+	// }
+	//
+	// }
 
 }

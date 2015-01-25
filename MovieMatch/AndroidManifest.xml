@@ -7,7 +7,7 @@
     <uses-sdk
         android:minSdkVersion="14"
         android:targetSdkVersion="15" />
-    
+
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -27,6 +27,10 @@
         <activity
             android:name=".MovieListActivity"
             android:label="@string/title_activity_movie_list" >
+        </activity>
+        <activity
+            android:name=".MovieProfileActivity"
+            android:label="@string/title_activity_movie_profile" >
         </activity>
     </application>
 
