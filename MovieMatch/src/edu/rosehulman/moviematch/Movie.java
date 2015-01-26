@@ -36,8 +36,8 @@ public class Movie implements Parcelable {
 		in.readStringList(mActors);
 	}
 
-	public Movie(String title, String director, ArrayList<String> actors,
-			ArrayList<String> genres) {
+	public Movie(String title, String director, List<String> actors,
+			List<String> genres) {
 		mTitle = title;
 		mDirector = director;
 		mActors = actors;

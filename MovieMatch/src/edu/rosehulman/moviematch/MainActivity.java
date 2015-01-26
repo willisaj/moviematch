@@ -1,6 +1,8 @@
 package edu.rosehulman.moviematch;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -26,6 +28,9 @@ public class MainActivity extends Activity implements OnClickListener {
 	private String distribution = "ERROR";
 	private String actor = "ERROR";
 	private String director = "ERROR";
+	
+	private EditText mActorEditText;
+	private EditText mDirectorEditText;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +49,8 @@ public class MainActivity extends Activity implements OnClickListener {
 		// Apply the adapter to the spinner
 		genreSpinner.setAdapter(genreAdapter);
 
-		EditText actorEditText = (EditText) findViewById(R.id.actor_editText);
-		actorEditText.addTextChangedListener(new TextWatcher() {
+		mActorEditText = (EditText) findViewById(R.id.actor_editText);
+		mActorEditText.addTextChangedListener(new TextWatcher() {
 
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before,
@@ -70,8 +75,8 @@ public class MainActivity extends Activity implements OnClickListener {
 			}
 		});
 
-		EditText directorEditText = (EditText) findViewById(R.id.director_editText);
-		directorEditText.addTextChangedListener(new TextWatcher() {
+		mDirectorEditText = (EditText) findViewById(R.id.director_editText);
+		mDirectorEditText.addTextChangedListener(new TextWatcher() {
 
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before,
@@ -151,10 +156,24 @@ public class MainActivity extends Activity implements OnClickListener {
 		Button recommendButton = (Button) findViewById(R.id.recommend_movie_button);
 		wishListButton.setOnClickListener(this);
 		recommendButton.setOnClickListener(this);
+		Log.d("MOVIEMATCH",
+				new TMDBMovieRecommender().getRecommendation().withDirector("Wes Anderson").withActor("Ralph Fiennes").getMovies().get(0).getTitle());
 
 	}
+	
+	protected void startRecommendationActivity() {
+		Intent intent = new Intent(this, MovieListActivity.class);
+		String actor = mActorEditText.getText().toString();
+		String director = mDirectorEditText.getText().toString();
+		List<Movie> movies = new TMDBMovieRecommender().getRecommendation().withActor(actor).withDirector(director).getMovies();
+		
+		intent.putExtra(KEY_TITLE, "Recommendations");
+		intent.putExtra(KEY_MOVIE_LIST, (ArrayList<Movie>)movies);
+		
+		this.startActivity(intent);
+	}
 
-	protected void startMovieListActivity(boolean isRecommendation) {
+	protected void startMovieListActivity(boolean isRecommendation) {		
 		Intent intent = new Intent(this, MovieListActivity.class);
 		// TODO make a central state that initializes other classes?
 		// TODO database.getArrayOfmovies();
@@ -208,7 +227,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		if (v.getId() == R.id.recommend_movie_button) {
-			startMovieListActivity(true);
+			startRecommendationActivity();
 		} else if (v.getId() == R.id.wishlist_button) {
 			startMovieListActivity(false);
 		} else {
