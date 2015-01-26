@@ -26,6 +26,13 @@ public class Movie implements Parcelable {
 	private String mDirector;
 	private List<String> mActors;
 	private List<String> mGenres;
+	
+	private String mDescription;
+	private String mTagline;
+	//Duration in minute
+	private int mDuration;
+	
+	private String mPosterUrl;
 
 	protected Movie(Parcel in) {
 		mTitle = in.readString();
@@ -34,6 +41,18 @@ public class Movie implements Parcelable {
 		mGenres = new ArrayList<String>();
 		in.readStringList(mGenres);
 		in.readStringList(mActors);
+		
+		mDescription = in.readString();
+		mTagline = in.readString();
+		mDuration = in.readInt();
+		
+		mPosterUrl = in.readString();
+	}
+	
+
+
+	public Movie(String title) {
+		this.mTitle = title;
 	}
 
 	public Movie(String title, String director, List<String> actors,
@@ -42,42 +61,6 @@ public class Movie implements Parcelable {
 		mDirector = director;
 		mActors = actors;
 		mGenres = genres;
-	}
-
-	public String getTitle() {
-		return mTitle;
-	}
-
-	public void setTitle(String title) {
-		this.mTitle = title;
-	}
-
-	public String getDirector() {
-		return mDirector;
-	}
-
-	public void setDirector(String director) {
-		this.mDirector = director;
-	}
-
-	public List<String> getActors() {
-		return mActors;
-	}
-
-	public void setActors(List<String> actors) {
-		this.mActors = actors;
-	}
-
-	public List<String> getGenres() {
-		return mGenres;
-	}
-
-	public void setGenres(List<String> genres) {
-		this.mGenres = genres;
-	}
-
-	public Movie(String title) {
-		this.mTitle = title;
 	}
 
 	@Override
@@ -92,7 +75,12 @@ public class Movie implements Parcelable {
 		dest.writeString(mDirector);
 		dest.writeStringList(mGenres);
 		dest.writeStringList(mActors);
-
+		
+		dest.writeString(mDescription);
+		dest.writeString(mTagline);
+		dest.writeInt(mDuration);
+		
+		dest.writeString(mPosterUrl);
 	}
 
 	public String getSummaryString() {
@@ -130,5 +118,69 @@ public class Movie implements Parcelable {
 	// }
 	//
 	// }
+	
+	public String getTitle() {
+		return mTitle;
+	}
+
+	public void setTitle(String title) {
+		this.mTitle = title;
+	}
+
+	public String getDirector() {
+		return mDirector;
+	}
+
+	public void setDirector(String director) {
+		this.mDirector = director;
+	}
+
+	public List<String> getActors() {
+		return mActors;
+	}
+
+	public void setActors(List<String> actors) {
+		this.mActors = actors;
+	}
+
+	public List<String> getGenres() {
+		return mGenres;
+	}
+
+	public void setGenres(List<String> genres) {
+		this.mGenres = genres;
+	}
+	
+	public String getDescription() {
+		return mDescription;
+	}
+
+	public void setDescription(String description) {
+		this.mDescription = description;
+	}
+
+	public String getTagline() {
+		return mTagline;
+	}
+
+	public void setTagline(String tagline) {
+		this.mTagline = tagline;
+	}
+
+	public int getDuration() {
+		return mDuration;
+	}
+
+	public void setDuration(int duration) {
+		this.mDuration = duration;
+	}
+	
+	public String getPosterUrl() {
+		return this.mPosterUrl;
+	}
+	
+	public void setPosterUrl(String posterUrl) {
+		this.mPosterUrl = posterUrl;
+	}
 
 }

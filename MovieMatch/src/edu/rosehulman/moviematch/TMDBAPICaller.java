@@ -19,7 +19,7 @@ public class TMDBAPICaller {
 
 	public static JSONObject makeCall(String url) throws InterruptedException,
 			ExecutionException, JSONException, TimeoutException, UnsupportedEncodingException {
-		Log.d("MOVIEMATCH", encode(url));
+		//Log.d("MOVIEMATCH", encode(url));
 		String jsonString = new RetrieveFeedTask().execute(encode(url)).get();
 		JSONObject json = new JSONObject(jsonString);
 		return json;

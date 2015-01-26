@@ -8,6 +8,8 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import android.util.Log;
+
 public class TMDBLookup {
 	
 	private static final String SEARCH_COMMAND = "/search";
@@ -77,6 +79,26 @@ public class TMDBLookup {
 		}
 		//TODO return a better message
 		return "Could not find director";
+	}
+	
+	public boolean fillInMovieInfo(int movieId, Movie movie) {
+		mUrl += MOVIE_COMMAND + "/" + movieId + "?";
+		mUrl += API_KEY_ARG + mApiKey;
+		Log.d("MOVIEMATCH", mUrl);
+		try {
+			JSONObject infoJson = TMDBAPICaller.makeCall(mUrl);
+			movie.setDescription(infoJson.getString("overview"));
+			movie.setTagline(infoJson.getString("tagline"));
+			movie.setDuration(infoJson.getInt("runtime"));
+			String posterUrl = "http://image.tmdb.org/t/p/w300";
+			posterUrl += infoJson.getString("poster_path");
+			movie.setPosterUrl(posterUrl);
+		} catch (Exception e) {
+			Log.d("MOVIEMATCH", e.getMessage());
+			return false;
+		}
+		
+		return true;
 	}
 
 }

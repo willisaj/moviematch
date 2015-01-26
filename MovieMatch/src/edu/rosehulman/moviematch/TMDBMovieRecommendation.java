@@ -61,6 +61,8 @@ public class TMDBMovieRecommendation implements IMovieRecommendation {
 				//TODO: Get a movie's genres
 				Movie movie = new Movie(title, director, actors, new ArrayList<String>());
 				
+				new TMDBLookup(mBaseUrl, mApiKey).fillInMovieInfo(movieId, movie);
+				
 				movies.add(movie);
 			}
 		} catch (Exception e) {

@@ -1,7 +1,6 @@
 package edu.rosehulman.moviematch;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import android.app.Activity;
@@ -156,16 +155,22 @@ public class MainActivity extends Activity implements OnClickListener {
 		Button recommendButton = (Button) findViewById(R.id.recommend_movie_button);
 		wishListButton.setOnClickListener(this);
 		recommendButton.setOnClickListener(this);
-		Log.d("MOVIEMATCH",
-				new TMDBMovieRecommender().getRecommendation().withDirector("Wes Anderson").withActor("Ralph Fiennes").getMovies().get(0).getTitle());
-
 	}
 	
 	protected void startRecommendationActivity() {
 		Intent intent = new Intent(this, MovieListActivity.class);
 		String actor = mActorEditText.getText().toString();
 		String director = mDirectorEditText.getText().toString();
-		List<Movie> movies = new TMDBMovieRecommender().getRecommendation().withActor(actor).withDirector(director).getMovies();
+		
+		IMovieRecommendation recommendation = new TMDBMovieRecommender().getRecommendation();
+		if (!actor.equals("")) {
+			recommendation.withActor(actor);
+		}
+		if (!director.equals("")) {
+			recommendation.withDirector(director);
+		}
+		
+		List<Movie> movies = recommendation.getMovies();
 		
 		intent.putExtra(KEY_TITLE, "Recommendations");
 		intent.putExtra(KEY_MOVIE_LIST, (ArrayList<Movie>)movies);
