@@ -12,6 +12,9 @@ import android.util.Log;
 
 public class TMDBLookup {
 	
+	private static final String GENRE_COMMAND = "/genre";
+	private static final String LIST = "/list?";
+	
 	private static final String SEARCH_COMMAND = "/search";
 	private static final String PERSON = "/person?";
 	
@@ -84,9 +87,19 @@ public class TMDBLookup {
 	public boolean fillInMovieInfo(int movieId, Movie movie) {
 		mUrl += MOVIE_COMMAND + "/" + movieId + "?";
 		mUrl += API_KEY_ARG + mApiKey;
-		Log.d("MOVIEMATCH", mUrl);
 		try {
 			JSONObject infoJson = TMDBAPICaller.makeCall(mUrl);
+			
+			List<Genre> genres = new ArrayList<Genre>();
+			JSONArray genresJson = infoJson.getJSONArray("genres");
+			for (int i = 0; i < genresJson.length(); i++) {
+				JSONObject genreJson = genresJson.getJSONObject(i);
+				String name = genreJson.getString("name");
+				int id = genreJson.getInt("id");
+				genres.add(new Genre(name, id));
+			}
+			movie.setGenres(genres);
+			
 			movie.setDescription(infoJson.getString("overview"));
 			movie.setTagline(infoJson.getString("tagline"));
 			movie.setDuration(infoJson.getInt("runtime"));
@@ -94,11 +107,32 @@ public class TMDBLookup {
 			posterUrl += infoJson.getString("poster_path");
 			movie.setPosterUrl(posterUrl);
 		} catch (Exception e) {
-			Log.d("MOVIEMATCH", e.getMessage());
+			//TODO Do something about errors
 			return false;
 		}
 		
 		return true;
+	}
+
+	public List<Genre> getGenres() {
+		List<Genre> genres = new ArrayList<Genre>();
+		
+		mUrl += GENRE_COMMAND + MOVIE_COMMAND + LIST;
+		mUrl += API_KEY_ARG + mApiKey;
+		try {
+			JSONObject baseJson = TMDBAPICaller.makeCall(mUrl);
+			JSONArray genresJson = baseJson.getJSONArray("genres");
+			for (int i = 0; i < genresJson.length(); i++) {
+				JSONObject genreJson = genresJson.getJSONObject(i);
+				String name = genreJson.getString("name");
+				int id = genreJson.getInt("id");
+				genres.add(new Genre(name, id));
+			}
+		} catch (Exception e) {
+			//TODO Handle errors better
+		}
+		
+		return genres;
 	}
 
 }

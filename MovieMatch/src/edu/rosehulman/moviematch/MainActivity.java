@@ -22,102 +22,33 @@ import android.widget.TextView;
 public class MainActivity extends Activity implements OnClickListener {
 	public static final String KEY_TITLE = "KEY_TITLE";
 	public static final String KEY_MOVIE_LIST = null;
-	// TODO consider using a global enum for genres?
-	private String genre = "ERROR";
+
 	private String distribution = "ERROR";
-	private String actor = "ERROR";
-	private String director = "ERROR";
-	
+
 	private EditText mActorEditText;
 	private EditText mDirectorEditText;
+	private Spinner mGenreSpinner;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		Spinner genreSpinner = (Spinner) findViewById(R.id.genre_spinner);
-		// Create an ArrayAdapter using the string array and a default spinner
-		// layout
-		ArrayAdapter<CharSequence> genreAdapter = ArrayAdapter
-				.createFromResource(this, R.array.genres,
-						android.R.layout.simple_spinner_item);
-		// Specify the layout to use when the list of choices appears
+		// Actor Edit Text
+		mActorEditText = (EditText) findViewById(R.id.actor_editText);
+
+		// Director Edit Text
+		mDirectorEditText = (EditText) findViewById(R.id.director_editText);
+
+		// Genre Spinner
+		mGenreSpinner = (Spinner) findViewById(R.id.genre_spinner);
+		List<Genre> genres = new TMDBMovieRecommender().getGenres();
+		genres.add(0, new Genre(getString(R.string.genre_hint), 0));
+		ArrayAdapter<Genre> genreAdapter = new ArrayAdapter<Genre>(this,
+				android.R.layout.simple_spinner_item, genres);
 		genreAdapter
 				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		// Apply the adapter to the spinner
-		genreSpinner.setAdapter(genreAdapter);
-
-		mActorEditText = (EditText) findViewById(R.id.actor_editText);
-		mActorEditText.addTextChangedListener(new TextWatcher() {
-
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before,
-					int count) {
-				// do nothing
-
-			}
-
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {
-				// do nothing
-
-			}
-
-			@Override
-			public void afterTextChanged(Editable s) {
-				MainActivity.this.actor = s.toString();
-				Log.d("", "You chose " + MainActivity.this.actor
-						+ " as your actor");
-
-			}
-		});
-
-		mDirectorEditText = (EditText) findViewById(R.id.director_editText);
-		mDirectorEditText.addTextChangedListener(new TextWatcher() {
-
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before,
-					int count) {
-				// do nothing
-
-			}
-
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {
-				// do nothing
-
-			}
-
-			@Override
-			public void afterTextChanged(Editable s) {
-				MainActivity.this.director = s.toString();
-				Log.d("", "You chose " + MainActivity.this.director
-						+ " as your director");
-
-			}
-		});
-
-		genreSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
-
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view,
-					int position, long id) {
-				MainActivity.this.genre = ((TextView) view).getText()
-						.toString();
-				Log.d("", "You chose " + MainActivity.this.genre
-						+ " as your genre");
-
-			}
-
-			@Override
-			public void onNothingSelected(AdapterView<?> parent) {
-				// TODO Auto-generated method stub
-
-			}
-		});
+		mGenreSpinner.setAdapter(genreAdapter);
 
 		Spinner distributionSpinner = (Spinner) findViewById(R.id.distribution_spinner);
 		// Create an ArrayAdapter using the string array and a default spinner
@@ -156,29 +87,34 @@ public class MainActivity extends Activity implements OnClickListener {
 		wishListButton.setOnClickListener(this);
 		recommendButton.setOnClickListener(this);
 	}
-	
+
 	protected void startRecommendationActivity() {
 		Intent intent = new Intent(this, MovieListActivity.class);
 		String actor = mActorEditText.getText().toString();
 		String director = mDirectorEditText.getText().toString();
-		
-		IMovieRecommendation recommendation = new TMDBMovieRecommender().getRecommendation();
+		int genreId = ((Genre) mGenreSpinner.getSelectedItem()).getId();
+
+		IMovieRecommendation recommendation = new TMDBMovieRecommender()
+				.getRecommendation();
 		if (!actor.equals("")) {
 			recommendation.withActor(actor);
 		}
 		if (!director.equals("")) {
 			recommendation.withDirector(director);
 		}
-		
+		if (genreId != 0) {
+			recommendation.withGenre(genreId);
+		}
+
 		List<Movie> movies = recommendation.getMovies();
-		
+
 		intent.putExtra(KEY_TITLE, "Recommendations");
-		intent.putExtra(KEY_MOVIE_LIST, (ArrayList<Movie>)movies);
-		
+		intent.putExtra(KEY_MOVIE_LIST, (ArrayList<Movie>) movies);
+
 		this.startActivity(intent);
 	}
 
-	protected void startMovieListActivity(boolean isRecommendation) {		
+	protected void startMovieListActivity(boolean isRecommendation) {
 		Intent intent = new Intent(this, MovieListActivity.class);
 		// TODO make a central state that initializes other classes?
 		// TODO database.getArrayOfmovies();
@@ -202,20 +138,19 @@ public class MainActivity extends Activity implements OnClickListener {
 		genresTwo.add("Animated");
 
 		ArrayList<Movie> moviesOne = new ArrayList<Movie>();
-		moviesOne.add(new Movie("A New Hope", "George Lucas", actorsOne,
-				genresOne));
+		moviesOne.add(new Movie("A New Hope", "George Lucas", actorsOne));
 		moviesOne.add(new Movie("The Empire Strikes Back", "George Lucas",
-				actorsOne, genresOne));
-		moviesOne.add(new Movie("Return of the Jedi", "George Lucas",
-				actorsOne, genresOne));
+				actorsOne));
+		moviesOne
+				.add(new Movie("Return of the Jedi", "George Lucas", actorsOne));
 
 		ArrayList<Movie> moviesTwo = new ArrayList<Movie>();
 		moviesTwo.add(new Movie("The Sorcerer's Stone", "Stephen Spielberg",
-				actorsTwo, genresTwo));
+				actorsTwo));
 		moviesTwo.add(new Movie("The Chamber of Secrets", "Oprah Winfrey",
-				actorsTwo, genresTwo));
+				actorsTwo));
 		moviesTwo.add(new Movie("The Prisoner of Azkaban", "Barbra Streissand",
-				actorsTwo, genresTwo));
+				actorsTwo));
 
 		if (isRecommendation) {
 			intent.putExtra(KEY_TITLE, "Recommendations");

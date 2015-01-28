@@ -1,5 +1,7 @@
 package edu.rosehulman.moviematch;
 
+import java.util.List;
+
 public class TMDBMovieRecommender implements IMovieRecommender {
 	
 	private final static String BASE_URL = "http://api.themoviedb.org/3";
@@ -12,6 +14,10 @@ public class TMDBMovieRecommender implements IMovieRecommender {
 	
 	public int getActorId(String name) {
 		return new TMDBLookup(BASE_URL, API_KEY).getPersonId(name);
+	}
+	
+	public List<Genre> getGenres() {
+		return new TMDBLookup(BASE_URL, API_KEY).getGenres();
 	}
 
 }

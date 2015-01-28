@@ -12,4 +12,6 @@ public interface IMovieRecommendation {
 	
 	public IMovieRecommendation withDirector(String director);
 
+	public IMovieRecommendation withGenre(int genreId);
+
 }

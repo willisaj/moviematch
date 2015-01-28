@@ -12,6 +12,7 @@ public class TMDBMovieRecommendation implements IMovieRecommendation {
 	private static final String COMMAND = "/discover/movie?";
 	private static final String ACTORS = "with_cast=";
 	private static final String DIRECTOR = "with_crew=";
+	private static final String GENRE = "with_genres=";
 	private static final String API_KEY = "api_key=";
 
 	private final String mApiKey;
@@ -19,6 +20,7 @@ public class TMDBMovieRecommendation implements IMovieRecommendation {
 
 	private List<Integer> mActorIds;
 	private int mDirectorId = 0;
+	private int mGenreId = 0;
 	
 	private String mUrl;
 
@@ -31,7 +33,7 @@ public class TMDBMovieRecommendation implements IMovieRecommendation {
 	@Override
 	public List<Movie> getMovies() {
 		int numArgs = 0;
-		if (mActorIds != null & mActorIds.size() > 0) {
+		if (mActorIds != null && mActorIds.size() > 0) {
 			mUrl += ACTORS;
 			mUrl += mActorIds.get(0);
 			for (int i = 1; i < mActorIds.size(); i++) {
@@ -43,6 +45,12 @@ public class TMDBMovieRecommendation implements IMovieRecommendation {
 		if (mDirectorId != 0) {
 			mUrl += (numArgs > 0) ? "&" : "";
 			mUrl += DIRECTOR + mDirectorId;
+			numArgs++;
+		}
+		
+		if (mGenreId != 0) {
+			mUrl += (numArgs > 0) ? "&" : "";
+			mUrl += GENRE + mGenreId;
 			numArgs++;
 		}
 		
@@ -58,8 +66,7 @@ public class TMDBMovieRecommendation implements IMovieRecommendation {
 				String title = jsonMovie.getString("title");
 				List<String> actors = new TMDBLookup(mBaseUrl, mApiKey).getActors(movieId);
 				String director = new TMDBLookup(mBaseUrl, mApiKey).getDirector(movieId);
-				//TODO: Get a movie's genres
-				Movie movie = new Movie(title, director, actors, new ArrayList<String>());
+				Movie movie = new Movie(title, director, actors);
 				
 				new TMDBLookup(mBaseUrl, mApiKey).fillInMovieInfo(movieId, movie);
 				
@@ -91,6 +98,12 @@ public class TMDBMovieRecommendation implements IMovieRecommendation {
 	@Override
 	public IMovieRecommendation withDirector(String director) {
 		mDirectorId = new TMDBLookup(mBaseUrl, mApiKey).getPersonId(director);
+		return this;
+	}
+
+	@Override
+	public IMovieRecommendation withGenre(int genreId) {
+		mGenreId = genreId;
 		return this;
 	}
 

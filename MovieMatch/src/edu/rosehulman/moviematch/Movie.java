@@ -25,7 +25,7 @@ public class Movie implements Parcelable {
 	private String mTitle;
 	private String mDirector;
 	private List<String> mActors;
-	private List<String> mGenres;
+	private List<Genre> mGenres;
 	
 	private String mDescription;
 	private String mTagline;
@@ -34,33 +34,28 @@ public class Movie implements Parcelable {
 	
 	private String mPosterUrl;
 
-	protected Movie(Parcel in) {
-		mTitle = in.readString();
-		mDirector = in.readString();
-		mActors = new ArrayList<String>();
-		mGenres = new ArrayList<String>();
-		in.readStringList(mGenres);
-		in.readStringList(mActors);
-		
-		mDescription = in.readString();
-		mTagline = in.readString();
-		mDuration = in.readInt();
-		
-		mPosterUrl = in.readString();
-	}
-	
-
-
 	public Movie(String title) {
 		this.mTitle = title;
 	}
 
-	public Movie(String title, String director, List<String> actors,
-			List<String> genres) {
+	public Movie(String title, String director, List<String> actors) {
 		mTitle = title;
 		mDirector = director;
 		mActors = actors;
-		mGenres = genres;
+	}
+	
+	protected Movie(Parcel in) {
+		mTitle = in.readString();
+		mDirector = in.readString();
+		
+		mActors = new ArrayList<String>();
+		in.readStringList(mActors);
+		
+		mGenres = in.createTypedArrayList(Genre.CREATOR);
+		mDescription = in.readString();
+		mTagline = in.readString();
+		mDuration = in.readInt();
+		mPosterUrl = in.readString();
 	}
 
 	@Override
@@ -73,13 +68,11 @@ public class Movie implements Parcelable {
 	public void writeToParcel(Parcel dest, int flags) {
 		dest.writeString(mTitle);
 		dest.writeString(mDirector);
-		dest.writeStringList(mGenres);
 		dest.writeStringList(mActors);
-		
+		dest.writeTypedList(mGenres);
 		dest.writeString(mDescription);
 		dest.writeString(mTagline);
 		dest.writeInt(mDuration);
-		
 		dest.writeString(mPosterUrl);
 	}
 
@@ -143,11 +136,11 @@ public class Movie implements Parcelable {
 		this.mActors = actors;
 	}
 
-	public List<String> getGenres() {
+	public List<Genre> getGenres() {
 		return mGenres;
 	}
 
-	public void setGenres(List<String> genres) {
+	public void setGenres(List<Genre> genres) {
 		this.mGenres = genres;
 	}
 	
