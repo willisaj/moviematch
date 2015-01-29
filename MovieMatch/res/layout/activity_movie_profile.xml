@@ -7,13 +7,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
-        <ImageView
-            android:id="@+id/moviePortrait"
+        <TextView
+            android:id="@+id/movie_title_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:contentDescription="@string/error"
+            android:text="@string/error"
+            android:textSize="25sp" />
+
+        <ImageView
+            android:id="@+id/moviePortrait"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/movie_title_view"
+            android:layout_centerHorizontal="true"
+            android:contentDescription="@string/cd_movie_poster"
             android:src="@drawable/ic_launcher" />
 
         <TextView
@@ -22,7 +31,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/moviePortrait"
             android:layout_centerHorizontal="true"
-            android:text="@string/error" />
+            android:text="@string/error"
+            android:textStyle="italic" />
 
         <LinearLayout
             android:id="@+id/rottenTomatoes"

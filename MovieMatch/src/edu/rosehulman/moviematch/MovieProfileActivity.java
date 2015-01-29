@@ -32,6 +32,7 @@ public class MovieProfileActivity extends Activity implements OnClickListener,
 	private Movie mMovie;
 	
 	private TextView mTitleView;
+	private TextView mTaglineView;
 	private TextView mDescriptionView;
 	private TextView mDurationView;
 	private TextView mMPAAView;
@@ -51,8 +52,11 @@ public class MovieProfileActivity extends Activity implements OnClickListener,
 		
 		setTitle(mMovie.getTitle());
 		
-		mTitleView = (TextView) findViewById(R.id.posterCaptionTitleView);
+		mTitleView = (TextView) findViewById(R.id.movie_title_view);
 		mTitleView.setText(mMovie.getTitle());
+		
+		mTaglineView = (TextView) findViewById(R.id.posterCaptionTitleView);
+		mTaglineView.setText("\"" + mMovie.getTagline() + "\"");
 		
 		mDescriptionView = (TextView) findViewById(R.id.description);
 		mDescriptionView.setText(mMovie.getDescription());
