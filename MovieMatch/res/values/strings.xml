@@ -18,5 +18,9 @@
     <string name="actor_hint">Enter the name of an actor you like</string>
     <string name="director_hint">Enter the name of a director you like</string>
     <string name="genre_hint">Select a genre you like</string>
+    
+    <!--  ImageView Content Descriptions -->
+    <string name="cd_movie_poster">The poster of the movie.</string>
+    <string name="cd_rt_rating">The icon for the RottenTomatoes Critics Approval Rating</string>
 
 </resources>

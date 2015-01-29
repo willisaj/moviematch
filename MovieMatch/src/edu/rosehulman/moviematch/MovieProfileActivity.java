@@ -13,23 +13,33 @@ import android.widget.TextView;
 
 public class MovieProfileActivity extends Activity implements OnClickListener,
 		OnRatingBarChangeListener {
-	public static final String KEY_MPAA_RATING = "KEY_MPAA_RATING";
 	public static final String KEY_METACRITIC_RATING = "KEY_METACRITIC_RATING";
-	public static final String KEY_ROTTEN_RATING = "KEY_ROTTEN_RATING";
 	public static final String KEY_USER_RATING = "KEY_USER_RATING";
 	private static final String REMOVE_FROM_WISHLIST = "Remove from Wishlist";
 	private static final String ADD_TO_WISHLIST = "Add to Wishlist";
 	public static final String KEY_IS_ON_WISHLIST = "KEY_IS_ON_WISHLIST";
 
 	public static final String KEY_MOVIE = "KEY_MOVIE";
+	
+	private static final String RT_CERTIFIED = "Certified Fresh";
+	private static final String RT_FRESH = "Fresh";
+	private static final String RT_ROTTEN = "Rotten";
 
 	private double rating;
 	private Button wishListButton;
 	private boolean isOnWishList;
 
 	private Movie mMovie;
+	
+	private TextView mTitleView;
+	private TextView mDescriptionView;
+	private TextView mDurationView;
+	private TextView mMPAAView;
 
 	private ImageView mMoviePortrait;
+	
+	private ImageView mRTRatingView;
+	private TextView mRTScoreView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -37,12 +47,35 @@ public class MovieProfileActivity extends Activity implements OnClickListener,
 		setContentView(R.layout.activity_movie_profile);
 
 		mMovie = (Movie) getIntent().getParcelableExtra(KEY_MOVIE);
-
-		String movieTitle = mMovie.getTitle();
-		double rottenRating = getIntent().getDoubleExtra(KEY_ROTTEN_RATING, 0);
-		String movieDescription = mMovie.getDescription();
-		String movieDuration = mMovie.getDuration() + " minutes";
-		String mpaaRating = getIntent().getStringExtra(KEY_MPAA_RATING);
+		new RTLookup().fillInMovieInfo(mMovie);
+		
+		setTitle(mMovie.getTitle());
+		
+		mTitleView = (TextView) findViewById(R.id.posterCaptionTitleView);
+		mTitleView.setText(mMovie.getTitle());
+		
+		mDescriptionView = (TextView) findViewById(R.id.description);
+		mDescriptionView.setText(mMovie.getDescription());
+		
+		mDurationView = (TextView) findViewById(R.id.lengthTextView);
+		mDurationView.setText(mMovie.getDuration() + " minutes");
+		
+		mMPAAView = (TextView) findViewById(R.id.mpaaTextView);
+		mMPAAView.setText(mMovie.getMPAARating());
+		
+		//Rotten Tomatoes
+		mRTRatingView = (ImageView) findViewById(R.id.rottenRating);
+		if (mMovie.getRTRating().equals(RT_CERTIFIED)) {
+			mRTRatingView.setImageDrawable(getResources().getDrawable(R.drawable.rt_certified));
+		} else if (mMovie.getRTRating().equals(RT_FRESH)) {
+			mRTRatingView.setImageDrawable(getResources().getDrawable(R.drawable.rt_fresh));
+		} else if (mMovie.getRTRating().equals(RT_ROTTEN)) {
+			mRTRatingView.setImageDrawable(getResources().getDrawable(R.drawable.rt_rotten));
+		}
+		
+		mRTScoreView = (TextView) findViewById(R.id.rottenScore);
+		mRTScoreView.setText(mMovie.getRTScore() + "%");
+		
 		this.rating = getIntent().getDoubleExtra(KEY_USER_RATING, 0);
 		this.isOnWishList = getIntent().getBooleanExtra(KEY_IS_ON_WISHLIST,
 				false);
@@ -52,13 +85,8 @@ public class MovieProfileActivity extends Activity implements OnClickListener,
 		//Show the movie poster
 		mMoviePortrait = (ImageView) findViewById(R.id.moviePortrait);
 		new DownloadImageTask(mMoviePortrait).execute(mMovie.getPosterUrl());
-
-		TextView titleView = (TextView) findViewById(R.id.posterCaptionTitleView);
-		TextView rottenRatingView = (TextView) findViewById(R.id.rottenRating);
+		
 		TextView metacriticRatingView = (TextView) findViewById(R.id.metacriticRating);
-		TextView descriptionView = (TextView) findViewById(R.id.description);
-		TextView movieLengthView = (TextView) findViewById(R.id.lengthTextView);
-		TextView mpaaRatingView = (TextView) findViewById(R.id.mpaaTextView);
 		RatingBar ratingBar = (RatingBar) findViewById(R.id.ratingBar);
 		this.wishListButton = (Button) findViewById(R.id.wishListButton);
 
@@ -74,19 +102,7 @@ public class MovieProfileActivity extends Activity implements OnClickListener,
 		ratingBar.setRating((float) this.rating);
 		ratingBar.setOnRatingBarChangeListener(this);
 
-		this.setTitle(movieTitle);
-
-		titleView.setText(movieTitle);
-
-		rottenRatingView.setText("" + rottenRating);
-
 		metacriticRatingView.setText("" + metacriticRating);
-
-		descriptionView.setText(movieDescription);
-
-		movieLengthView.setText(" " + movieDuration);
-
-		mpaaRatingView.setText(" " + mpaaRating);
 
 	}
 

@@ -62,9 +62,7 @@ public class MovieListActivity extends Activity implements OnItemClickListener {
 		Intent intent = new Intent(this, MovieProfileActivity.class);
 		
 		intent.putExtra(MovieProfileActivity.KEY_METACRITIC_RATING, (float) 1.5);
-		intent.putExtra(MovieProfileActivity.KEY_MPAA_RATING, "Temp MPAA Rating");
 		intent.putExtra(MovieProfileActivity.KEY_USER_RATING, 0);
-		intent.putExtra(MovieProfileActivity.KEY_ROTTEN_RATING, (float) 1.2);
 		intent.putExtra(MovieProfileActivity.KEY_IS_ON_WISHLIST, false);
 		
 		intent.putExtra(MovieProfileActivity.KEY_MOVIE, mMovies.get(position));

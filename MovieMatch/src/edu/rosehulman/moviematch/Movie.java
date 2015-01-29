@@ -29,10 +29,14 @@ public class Movie implements Parcelable {
 	
 	private String mDescription;
 	private String mTagline;
-	//Duration in minute
+	//Duration in minutes
 	private int mDuration;
+	private String mMPAARating;
 	
 	private String mPosterUrl;
+	
+	private String mRTRating;
+	private int mRTScore;
 
 	public Movie(String title) {
 		this.mTitle = title;
@@ -168,12 +172,36 @@ public class Movie implements Parcelable {
 		this.mDuration = duration;
 	}
 	
+	public String getMPAARating() {
+		return mMPAARating;
+	}
+
+	public void setMPAARating(String mpaaRating) {
+		this.mMPAARating = mpaaRating;
+	}
+	
 	public String getPosterUrl() {
 		return this.mPosterUrl;
 	}
 	
 	public void setPosterUrl(String posterUrl) {
 		this.mPosterUrl = posterUrl;
+	}
+	
+	public String getRTRating() {
+		return mRTRating;
+	}
+
+	public void setRTRating(String rtRating) {
+		this.mRTRating = rtRating;
+	}
+
+	public int getRTScore() {
+		return mRTScore;
+	}
+
+	public void setRTScore(int rtScore) {
+		this.mRTScore = rtScore;
 	}
 
 }
