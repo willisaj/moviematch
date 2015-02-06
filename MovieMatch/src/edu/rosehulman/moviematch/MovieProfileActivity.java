@@ -20,7 +20,7 @@ public class MovieProfileActivity extends Activity implements OnClickListener,
 	public static final String KEY_IS_ON_WISHLIST = "KEY_IS_ON_WISHLIST";
 
 	public static final String KEY_MOVIE = "KEY_MOVIE";
-	
+
 	private static final String RT_CERTIFIED = "Certified Fresh";
 	private static final String RT_FRESH = "Fresh";
 	private static final String RT_ROTTEN = "Rotten";
@@ -30,7 +30,7 @@ public class MovieProfileActivity extends Activity implements OnClickListener,
 	private boolean isOnWishList;
 
 	private Movie mMovie;
-	
+
 	private TextView mTitleView;
 	private TextView mTaglineView;
 	private TextView mDescriptionView;
@@ -38,7 +38,7 @@ public class MovieProfileActivity extends Activity implements OnClickListener,
 	private TextView mMPAAView;
 
 	private ImageView mMoviePortrait;
-	
+
 	private ImageView mRTRatingView;
 	private TextView mRTScoreView;
 
@@ -49,47 +49,52 @@ public class MovieProfileActivity extends Activity implements OnClickListener,
 
 		mMovie = (Movie) getIntent().getParcelableExtra(KEY_MOVIE);
 		new RTLookup().fillInMovieInfo(mMovie);
-		
+
 		setTitle(mMovie.getTitle());
-		
+
 		mTitleView = (TextView) findViewById(R.id.movie_title_view);
 		mTitleView.setText(mMovie.getTitle());
-		
+
 		mTaglineView = (TextView) findViewById(R.id.posterCaptionTitleView);
 		mTaglineView.setText("\"" + mMovie.getTagline() + "\"");
-		
+
 		mDescriptionView = (TextView) findViewById(R.id.description);
 		mDescriptionView.setText(mMovie.getDescription());
-		
+
 		mDurationView = (TextView) findViewById(R.id.lengthTextView);
 		mDurationView.setText(mMovie.getDuration() + " minutes");
-		
+
 		mMPAAView = (TextView) findViewById(R.id.mpaaTextView);
 		mMPAAView.setText(mMovie.getMPAARating());
-		
-		//Rotten Tomatoes
-		mRTRatingView = (ImageView) findViewById(R.id.rottenRating);
-		if (mMovie.getRTRating().equals(RT_CERTIFIED)) {
-			mRTRatingView.setImageDrawable(getResources().getDrawable(R.drawable.rt_certified));
-		} else if (mMovie.getRTRating().equals(RT_FRESH)) {
-			mRTRatingView.setImageDrawable(getResources().getDrawable(R.drawable.rt_fresh));
-		} else if (mMovie.getRTRating().equals(RT_ROTTEN)) {
-			mRTRatingView.setImageDrawable(getResources().getDrawable(R.drawable.rt_rotten));
+
+		// Rotten Tomatoes
+		if (mMovie.getRTRating() != null) {
+			mRTRatingView = (ImageView) findViewById(R.id.rottenRating);
+			if (mMovie.getRTRating().equals(RT_CERTIFIED)) {
+				mRTRatingView.setImageDrawable(getResources().getDrawable(
+						R.drawable.rt_certified));
+			} else if (mMovie.getRTRating().equals(RT_FRESH)) {
+				mRTRatingView.setImageDrawable(getResources().getDrawable(
+						R.drawable.rt_fresh));
+			} else if (mMovie.getRTRating().equals(RT_ROTTEN)) {
+				mRTRatingView.setImageDrawable(getResources().getDrawable(
+						R.drawable.rt_rotten));
+			}
+
+			mRTScoreView = (TextView) findViewById(R.id.rottenScore);
+			mRTScoreView.setText(mMovie.getRTScore() + "%");
 		}
-		
-		mRTScoreView = (TextView) findViewById(R.id.rottenScore);
-		mRTScoreView.setText(mMovie.getRTScore() + "%");
-		
+
 		this.rating = getIntent().getDoubleExtra(KEY_USER_RATING, 0);
 		this.isOnWishList = getIntent().getBooleanExtra(KEY_IS_ON_WISHLIST,
 				false);
 		double metacriticRating = getIntent().getDoubleExtra(
 				KEY_METACRITIC_RATING, 0);
 
-		//Show the movie poster
+		// Show the movie poster
 		mMoviePortrait = (ImageView) findViewById(R.id.moviePortrait);
 		new DownloadImageTask(mMoviePortrait).execute(mMovie.getPosterUrl());
-		
+
 		TextView metacriticRatingView = (TextView) findViewById(R.id.metacriticRating);
 		RatingBar ratingBar = (RatingBar) findViewById(R.id.ratingBar);
 		this.wishListButton = (Button) findViewById(R.id.wishListButton);

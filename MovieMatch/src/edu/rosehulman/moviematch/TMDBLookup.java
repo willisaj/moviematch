@@ -106,6 +106,11 @@ public class TMDBLookup {
 			String posterUrl = "http://image.tmdb.org/t/p/w300";
 			posterUrl += infoJson.getString("poster_path");
 			movie.setPosterUrl(posterUrl);
+			
+			String releaseDate = infoJson.getString("release_date");
+			int releaseYear = Integer.valueOf(releaseDate.substring(0, releaseDate.indexOf("-")));
+			movie.setReleaseYear(releaseYear);
+			
 		} catch (Exception e) {
 			//TODO Do something about errors
 			return false;

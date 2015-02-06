@@ -33,6 +33,8 @@ public class Movie implements Parcelable {
 	private int mDuration;
 	private String mMPAARating;
 	
+	private int mReleaseYear;
+
 	private String mPosterUrl;
 	
 	private String mRTRating;
@@ -59,6 +61,7 @@ public class Movie implements Parcelable {
 		mDescription = in.readString();
 		mTagline = in.readString();
 		mDuration = in.readInt();
+		mReleaseYear = in.readInt();
 		mPosterUrl = in.readString();
 	}
 
@@ -77,6 +80,7 @@ public class Movie implements Parcelable {
 		dest.writeString(mDescription);
 		dest.writeString(mTagline);
 		dest.writeInt(mDuration);
+		dest.writeInt(mReleaseYear);
 		dest.writeString(mPosterUrl);
 	}
 
@@ -178,6 +182,14 @@ public class Movie implements Parcelable {
 
 	public void setMPAARating(String mpaaRating) {
 		this.mMPAARating = mpaaRating;
+	}
+	
+	public int getReleaseYear() {
+		return mReleaseYear;
+	}
+
+	public void setReleaseYear(int releaseYear) {
+		this.mReleaseYear = releaseYear;
 	}
 	
 	public String getPosterUrl() {

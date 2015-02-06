@@ -27,7 +27,15 @@ public class RTLookup {
 		try {
 			JSONObject resultsJson = TMDBAPICaller.makeCall(mUrl);
 			JSONArray moviesJson = resultsJson.getJSONArray("movies");
-			JSONObject movieJson = moviesJson.getJSONObject(0);
+			JSONObject movieJson = null;
+			for (int i = 0; i < moviesJson.length(); i++) {
+				movieJson = moviesJson.getJSONObject(i);
+				int year = movieJson.getInt("year");
+				String title = movieJson.getString("title");
+				if (year == movie.getReleaseYear() && title.equals(movie.getTagline())) {
+					break;
+				}
+			}
 			
 			JSONObject ratingsJson = movieJson.getJSONObject("ratings");
 			movie.setRTRating(ratingsJson.getString("critics_rating"));
