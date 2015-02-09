@@ -67,6 +67,7 @@ public class TMDBMovieRecommendation implements IMovieRecommendation {
 				List<String> actors = new TMDBLookup(mBaseUrl, mApiKey).getActors(movieId);
 				String director = new TMDBLookup(mBaseUrl, mApiKey).getDirector(movieId);
 				Movie movie = new Movie(title, director, actors);
+				movie.setTmdbId(movieId);
 				
 				new TMDBLookup(mBaseUrl, mApiKey).fillInMovieInfo(movieId, movie);
 				

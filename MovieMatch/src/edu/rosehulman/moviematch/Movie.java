@@ -21,6 +21,8 @@ public class Movie implements Parcelable {
 		}
 
 	};
+	
+	private int mTmdbId;
 
 	private String mTitle;
 	private String mDirector;
@@ -36,9 +38,12 @@ public class Movie implements Parcelable {
 	private int mReleaseYear;
 
 	private String mPosterUrl;
+	private String mTrailerUrl;
 	
 	private String mRTRating;
 	private int mRTScore;
+	
+	private String mGooglePlayPurchaseUrl;
 
 	public Movie(String title) {
 		this.mTitle = title;
@@ -51,6 +56,8 @@ public class Movie implements Parcelable {
 	}
 	
 	protected Movie(Parcel in) {
+		mTmdbId = in.readInt();
+		
 		mTitle = in.readString();
 		mDirector = in.readString();
 		
@@ -63,6 +70,9 @@ public class Movie implements Parcelable {
 		mDuration = in.readInt();
 		mReleaseYear = in.readInt();
 		mPosterUrl = in.readString();
+		mTrailerUrl = in.readString();
+		
+		mGooglePlayPurchaseUrl = in.readString();
 	}
 
 	@Override
@@ -73,6 +83,7 @@ public class Movie implements Parcelable {
 
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeInt(mTmdbId);
 		dest.writeString(mTitle);
 		dest.writeString(mDirector);
 		dest.writeStringList(mActors);
@@ -82,6 +93,9 @@ public class Movie implements Parcelable {
 		dest.writeInt(mDuration);
 		dest.writeInt(mReleaseYear);
 		dest.writeString(mPosterUrl);
+		dest.writeString(mTrailerUrl);
+		
+		dest.writeString(mGooglePlayPurchaseUrl);
 	}
 
 	public String getSummaryString() {
@@ -119,6 +133,14 @@ public class Movie implements Parcelable {
 	// }
 	//
 	// }
+	
+	public int getTmdbId() {
+		return mTmdbId;
+	}
+
+	public void setTmdbId(int tmdbId) {
+		this.mTmdbId = tmdbId;
+	}
 	
 	public String getTitle() {
 		return mTitle;
@@ -200,6 +222,14 @@ public class Movie implements Parcelable {
 		this.mPosterUrl = posterUrl;
 	}
 	
+	public String getTrailerUrl() {
+		return mTrailerUrl;
+	}
+
+	public void setTrailerUrl(String trailerUrl) {
+		this.mTrailerUrl = trailerUrl;
+	}
+	
 	public String getRTRating() {
 		return mRTRating;
 	}
@@ -214,6 +244,14 @@ public class Movie implements Parcelable {
 
 	public void setRTScore(int rtScore) {
 		this.mRTScore = rtScore;
+	}
+	
+	public String getGooglePlayPurchaseUrl() {
+		return mGooglePlayPurchaseUrl;
+	}
+
+	public void setGooglePlayPurchaseUrl(String googlePlayPurchaseUrl) {
+		this.mGooglePlayPurchaseUrl = googlePlayPurchaseUrl;
 	}
 
 }

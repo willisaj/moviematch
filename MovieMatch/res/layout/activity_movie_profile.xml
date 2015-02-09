@@ -129,10 +129,26 @@
             android:text="@string/error" />
 
         <Button
+            android:id="@+id/purchase_google_play_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/mpaaLabel"
+            android:layout_below="@id/mpaaLabel"
+            android:text="@string/purchase" />
+        
+        <Button
+            android:id="@+id/watch_trailer_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/purchase_google_play_button"
+            android:layout_below="@id/purchase_google_play_button"
+            android:text="@string/watch_trailer" />
+
+        <Button
             android:id="@+id/wishListButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/mpaaLabel"
+            android:layout_below="@id/watch_trailer_button"
             android:layout_centerHorizontal="true"
             android:text="@string/error" />
     </RelativeLayout>

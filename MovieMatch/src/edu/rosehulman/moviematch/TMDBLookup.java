@@ -1,14 +1,10 @@
 package edu.rosehulman.moviematch;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import android.util.Log;
 
 public class TMDBLookup {
 	

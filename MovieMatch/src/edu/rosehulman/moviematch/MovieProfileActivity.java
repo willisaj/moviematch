@@ -1,15 +1,22 @@
 package edu.rosehulman.moviematch;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.RatingBar;
 import android.widget.RatingBar.OnRatingBarChangeListener;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 public class MovieProfileActivity extends Activity implements OnClickListener,
 		OnRatingBarChangeListener {
@@ -41,6 +48,10 @@ public class MovieProfileActivity extends Activity implements OnClickListener,
 
 	private ImageView mRTRatingView;
 	private TextView mRTScoreView;
+	
+	private Button mPurchaseGooglePlayButton;
+	
+	private Button mWatchTrailerButton;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +60,7 @@ public class MovieProfileActivity extends Activity implements OnClickListener,
 
 		mMovie = (Movie) getIntent().getParcelableExtra(KEY_MOVIE);
 		new RTLookup().fillInMovieInfo(mMovie);
+		new GuideboxLookup().fillInMovieInfo(mMovie);
 
 		setTitle(mMovie.getTitle());
 
@@ -84,6 +96,25 @@ public class MovieProfileActivity extends Activity implements OnClickListener,
 			mRTScoreView = (TextView) findViewById(R.id.rottenScore);
 			mRTScoreView.setText(mMovie.getRTScore() + "%");
 		}
+		
+		mPurchaseGooglePlayButton = (Button) findViewById(R.id.purchase_google_play_button);
+		mPurchaseGooglePlayButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(mMovie.getGooglePlayPurchaseUrl()));
+				startActivity(browserIntent);
+			}
+			
+		});
+		
+		mWatchTrailerButton = (Button) findViewById(R.id.watch_trailer_button);
+		mWatchTrailerButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				startTrailer();
+			}
+		});
 
 		this.rating = getIntent().getDoubleExtra(KEY_USER_RATING, 0);
 		this.isOnWishList = getIntent().getBooleanExtra(KEY_IS_ON_WISHLIST,
@@ -113,6 +144,12 @@ public class MovieProfileActivity extends Activity implements OnClickListener,
 
 		metacriticRatingView.setText("" + metacriticRating);
 
+	}
+	
+	private void startTrailer() {
+		Intent intent = new Intent(this, TrailerActivity.class);
+		intent.putExtra(TrailerActivity.KEY_TRAILER_URL, mMovie.getTrailerUrl());
+		this.startActivity(intent);
 	}
 
 	@Override
