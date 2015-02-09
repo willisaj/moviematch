@@ -32,6 +32,10 @@
             android:name=".MovieProfileActivity"
             android:label="@string/title_activity_movie_profile" >
         </activity>
+        <activity
+            android:name=".MoodActivity"
+            android:label="@string/title_activity_mood" >
+        </activity>
     </application>
 
 </manifest>

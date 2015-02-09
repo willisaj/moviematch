@@ -18,8 +18,23 @@
     <string name="actor_hint">Enter the name of an actor you like</string>
     <string name="director_hint">Enter the name of a director you like</string>
     <string name="genre_hint">Select a genre you like</string>
-    
-    <!--  ImageView Content Descriptions -->
+    <string name="hulu_platform">Hulu</string>
+    <string name="youtube_platform">youTube</string>
+    <string name="netflix_platform">Netflix</string>
+    <string name="theatres_platform">In Theatres</string>
+    <string name="redbox_platform">Redbox</string>
+    <string name="amazon_platform">Amazon Prime</string>
+    <string name="title_activity_mood">Preferences</string>
+    <string name="actors">Actors:</string>
+    <string name="directors">Directors:</string>
+    <string name="genres">Genres:</string>
+    <string name="edit">Edit</string>
+    <string name="add">Add</string>
+    <string name="actor_add_dialog">Add an actor</string>
+    <string name="director_add_dialog">Add a director</string>
+      <string name="edit_genre_title">Select or deselect genres</string>
+
+    <!-- ImageView Content Descriptions -->
     <string name="cd_movie_poster">The poster of the movie.</string>
     <string name="cd_rt_rating">The icon for the RottenTomatoes Critics Approval Rating</string>
 

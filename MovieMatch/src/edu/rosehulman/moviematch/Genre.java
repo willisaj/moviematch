@@ -4,15 +4,15 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Genre implements Parcelable {
-	
+
 	private String mName;
 	private int mId;
-	
+
 	public Genre(String name, int id) {
 		mName = name;
 		mId = id;
 	}
-	
+
 	public Genre(Parcel source) {
 		mName = source.readString();
 		mId = source.readInt();
@@ -45,20 +45,33 @@ public class Genre implements Parcelable {
 	public void setId(int id) {
 		this.mId = id;
 	}
-	
+
 	@Override
 	public String toString() {
 		return mName;
 	}
-	
-	public static final Parcelable.Creator<Genre> CREATOR = new Parcelable.Creator<Genre>() {
-	    public Genre createFromParcel(Parcel in) {
-	        return new Genre(in);
-	    }
 
-	    public Genre[] newArray(int size) {
-	        return new Genre[size];
-	    }
+	public static final Parcelable.Creator<Genre> CREATOR = new Parcelable.Creator<Genre>() {
+		public Genre createFromParcel(Parcel in) {
+			return new Genre(in);
+		}
+
+		public Genre[] newArray(int size) {
+			return new Genre[size];
+		}
 	};
+
+	@Override
+	public boolean equals(Object o) {
+		if (!mName.equals(((Genre) o).getName())) {
+			return false;
+		}
+
+		if (!(mId == ((Genre) o).getId())) {
+			return false;
+		}
+
+		return true;
+	}
 
 }
