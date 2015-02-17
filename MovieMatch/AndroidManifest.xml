@@ -37,6 +37,10 @@
             android:name=".TrailerActivity"
             android:label="@string/title_activity_trailer" >
         </activity>
+        <activity
+            android:name=".PreferencesActivity"
+            android:label="@string/title_activity_preferences" >
+        </activity>
     </application>
 
 </manifest>
