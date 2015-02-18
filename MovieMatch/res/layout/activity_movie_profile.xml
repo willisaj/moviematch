@@ -128,39 +128,27 @@
             android:layout_toRightOf="@id/mpaaLabel"
             android:text="@string/error" />
 
-        <LinearLayout
-            android:id="@+id/distributionButtons"
-            android:layout_width="250dp"
+        <Button
+            android:id="@+id/purchase_google_play_button"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/mpaaTextView"
-            android:layout_centerHorizontal="true"
-            android:orientation="vertical" >
-
-            <Button
-                android:id="@+id/purchase_google_play_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/purchase_google_play"
-                android:drawableLeft="@drawable/google_play_store_48" />
-            
-             <Button
-                android:id="@+id/purchase_amazon_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/purchase_amazon" />
-
-            <Button
-                android:id="@+id/watch_trailer_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/watch_trailer" />
-        </LinearLayout>
+            android:layout_alignLeft="@id/mpaaLabel"
+            android:layout_below="@id/mpaaLabel"
+            android:text="@string/purchase" />
+        
+        <Button
+            android:id="@+id/watch_trailer_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/purchase_google_play_button"
+            android:layout_below="@id/purchase_google_play_button"
+            android:text="@string/watch_trailer" />
 
         <Button
             android:id="@+id/wishListButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/distributionButtons"
+            android:layout_below="@id/watch_trailer_button"
             android:layout_centerHorizontal="true"
             android:text="@string/error" />
     </RelativeLayout>
