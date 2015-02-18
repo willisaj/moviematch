@@ -3,8 +3,6 @@ package edu.rosehulman.moviematch;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import android.util.Log;
-
 public class GuideboxLookup {
 	
 	private final String mBaseUrl;
@@ -30,11 +28,8 @@ public class GuideboxLookup {
 	}
 	
 	public int getGuideboxIdFromTMDBId(int tmdbId) {
-		Log.d("MOVIEMATCH", "TMDB ID: " + tmdbId);
 		
 		mUrl += SEARCH_COMMAND + MOVIE_COMMAND + ID + TMDB + "/" + tmdbId;
-		
-		Log.d("MOVIEMATCH", "URL2" + mUrl);
 		try {
 			JSONObject movieJson = TMDBAPICaller.makeCall(mUrl);
 			return movieJson.getInt("id");
@@ -48,15 +43,10 @@ public class GuideboxLookup {
 	public boolean fillInMovieInfo(Movie movie) {
 		int guideboxId = new GuideboxLookup(mBaseUrl, mApiKey).getGuideboxIdFromTMDBId(movie.getTmdbId());
 		
-		Log.d("MOVIEMATCH", "Guidebox ID: " + guideboxId);
-		
 		mUrl += MOVIE_COMMAND + "/" + guideboxId;
-		
-		Log.d("MOVIEMATCH", "Url: " + mUrl);
 		
 		try {
 			JSONObject infoJson = TMDBAPICaller.makeCall(mUrl);
-			Log.d("MOVIEMATCH", "Got here");
 			
 			JSONObject trailersJson = infoJson.getJSONObject("trailers");
 			JSONArray androidTrailersJson = trailersJson.getJSONArray("android");
@@ -66,15 +56,23 @@ public class GuideboxLookup {
 				movie.setTrailerUrl(trailerUrl);
 			}
 			
+			//Google Play
 			JSONArray purchaseAndroidJson = infoJson.getJSONArray("purchase_android_sources");
 			for (int i = 0; i < purchaseAndroidJson.length(); i++) {
-				Log.d("MOVIEMATCH", "Got here 2");
 				JSONObject sourceJson = purchaseAndroidJson.getJSONObject(i);
 				String source = sourceJson.getString("source");
 				if (source.equals("google_play")) {
 					movie.setGooglePlayPurchaseUrl(sourceJson.getString("link"));
-					
-					Log.d("MOVIEMATCH", "Link: " + movie.getGooglePlayPurchaseUrl());
+				}
+			}
+			
+			//Purchase Amazon
+			JSONArray purchaseWebJson = infoJson.getJSONArray("purchase_web_sources");
+			for (int i = 0; i < purchaseWebJson.length(); i++) {
+				JSONObject sourceJson = purchaseWebJson.getJSONObject(i);
+				String source = sourceJson.getString("source");
+				if (source.equals("amazon_buy")) {
+					movie.setAmazonPurchaseUrl(sourceJson.getString("link"));
 				}
 			}
 		} catch (Exception e) {
