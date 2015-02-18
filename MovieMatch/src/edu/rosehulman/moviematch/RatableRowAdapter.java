@@ -7,18 +7,20 @@ import android.os.Parcelable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.TextView;
 
 public class RatableRowAdapter extends BaseAdapter {
 	ArrayList<RatablePerson> mPeople;
 	private Context mContext;
 
-	public RatableRowAdapter(Context context, ArrayList<RatablePerson> actorList) {
+	public RatableRowAdapter(Context context,
+			ArrayList<RatablePerson> personList) {
 		mContext = context;
 
-		if (actorList == null) {
+		if (personList == null) {
 			mPeople = new ArrayList<RatablePerson>();
 		} else {
-			mPeople = actorList;
+			mPeople = personList;
 		}
 
 	}
@@ -41,17 +43,30 @@ public class RatableRowAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		RatableView rv;
+		// RatableView rv;
+		// if (convertView == null) {
+		// // make one
+		// rv = new RatableView(mContext);
+		// } else {
+		// // use the one passed in
+		// rv = (RatableView) convertView;
+		// }
+		// // customize it
+		// rv.setText(mPeople.get(position).getName());
+		// rv.setRating(mPeople.get(position).getRating());
+		// return rv;
+
+		TextView rv;
 		if (convertView == null) {
 			// make one
-			rv = new RatableView(mContext);
+			rv = new TextView(mContext);
 		} else {
 			// use the one passed in
-			rv = (RatableView) convertView;
+			rv = (TextView) convertView;
 		}
 		// customize it
 		rv.setText(mPeople.get(position).getName());
-		rv.setRating(mPeople.get(position).getRating());
+		// rv.setRating(mPeople.get(position).getRating());
 		return rv;
 	}
 

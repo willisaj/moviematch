@@ -7,6 +7,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -19,7 +22,7 @@ import android.widget.TextView;
 
 public class MainActivity extends Activity implements OnClickListener {
 	public static final String KEY_TITLE = "KEY_TITLE";
-	public static final String KEY_MOVIE_LIST = null;
+	public static final String KEY_MOVIE_LIST = "MOVIE_LIST";
 
 	private String distribution = "ERROR";
 
@@ -117,42 +120,50 @@ public class MainActivity extends Activity implements OnClickListener {
 		// TODO make a central state that initializes other classes?
 		// TODO database.getArrayOfmovies();
 
-		ArrayList<String> actorsOne = new ArrayList<String>();
-		actorsOne.add("Jimmy Kimmel");
-		actorsOne.add("That one guy from American Grafitti");
-		actorsOne.add("Carrie Grant");
+		// ArrayList<String> actorsOne = new ArrayList<String>();
+		// actorsOne.add("Jimmy Kimmel");
+		// actorsOne.add("That one guy from American Grafitti");
+		// actorsOne.add("Carrie Grant");
 		ArrayList<String> actorsTwo = new ArrayList<String>();
 		actorsTwo.add("Daniel Radcliffe");
 		actorsTwo.add("Emma Stone");
 		actorsTwo.add("Rupert Grint");
 
-		ArrayList<String> genresOne = new ArrayList<String>();
-		genresOne.add("Action");
-		genresOne.add("Amazing");
-		genresOne.add("Sci-Fi");
-		ArrayList<String> genresTwo = new ArrayList<String>();
-		genresTwo.add("Romance");
-		genresTwo.add("Zombie Comedy");
-		genresTwo.add("Animated");
+		List<Genre> genresAll = new TMDBMovieRecommender().getGenres();
+		// ArrayList<Genre> genresOne = new ArrayList<Genre>();
+		ArrayList<Genre> genresTwo = new ArrayList<Genre>();
+		for (Genre genre : genresAll) {
+			if ((genre.toString()).equals("Romance")) {
+				genresTwo.add(genre);
+			}
+		}
 
-		ArrayList<Movie> moviesOne = new ArrayList<Movie>();
-		moviesOne.add(new Movie("A New Hope", "George Lucas", actorsOne));
-		moviesOne.add(new Movie("The Empire Strikes Back", "George Lucas",
-				actorsOne));
-		moviesOne
-				.add(new Movie("Return of the Jedi", "George Lucas", actorsOne));
+		// genresOne.add("Action");
+		// genresOne.add("Amazing");
+		// genresOne.add("Sci-Fi");
+		//
+		// genresTwo.add("Romance");
+		// genresTwo.add("Zombie Comedy");
+		// genresTwo.add("Animated");
+
+		// ArrayList<Movie> moviesOne = new ArrayList<Movie>();
+		// moviesOne.add(new Movie("A New Hope", "George Lucas", actorsOne));
+		// moviesOne.add(new Movie("The Empire Strikes Back", "George Lucas",
+		// actorsOne));
+		// moviesOne
+		// .add(new Movie("Return of the Jedi", "George Lucas", actorsOne));
 
 		ArrayList<Movie> moviesTwo = new ArrayList<Movie>();
 		moviesTwo.add(new Movie("The Sorcerer's Stone", "Stephen Spielberg",
-				actorsTwo));
+				actorsTwo, genresTwo));
 		moviesTwo.add(new Movie("The Chamber of Secrets", "Oprah Winfrey",
-				actorsTwo));
+				actorsTwo, genresTwo));
 		moviesTwo.add(new Movie("The Prisoner of Azkaban", "Barbra Streissand",
-				actorsTwo));
+				actorsTwo, genresTwo));
 
 		if (isRecommendation) {
 			intent.putExtra(KEY_TITLE, "Recommendations");
-			intent.putExtra(KEY_MOVIE_LIST, moviesOne);
+			intent.putExtra(KEY_MOVIE_LIST, moviesTwo);
 		} else {
 			intent.putExtra(KEY_TITLE, "Wish List");
 			intent.putExtra(KEY_MOVIE_LIST, moviesTwo);
@@ -172,5 +183,26 @@ public class MainActivity extends Activity implements OnClickListener {
 			Log.d("", "CRITICAL ERROR IN MAINACTIVITY: onClick()");
 		}
 
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.main, menu);
+
+		menu.getItem(0).setOnMenuItemClickListener(
+				new OnMenuItemClickListener() {
+
+					@Override
+					public boolean onMenuItemClick(MenuItem item) {
+						startPreferencesActivity();
+						return false;
+					}
+				});
+		return true;
+	}
+
+	protected void startPreferencesActivity() {
+		this.startActivity(new Intent(this, PreferencesActivity.class));
 	}
 }

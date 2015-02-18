@@ -27,6 +27,10 @@
     <string name="add">Add</string>
     <string name="actor_add_dialog">Add an actor</string>
     <string name="director_add_dialog">Add a director</string>
+    <string name="edit_genre_title">Select or deselect genres</string>
+    <string name="edit_mpaa_title">Select or deselect desired MPAA ratings</string>
+    <string name="mpaas">MPAA ratings:</string>
+    <string name="platforms">Platforms:</string>
 
     <!-- ImageView Content Descriptions -->
     <string name="cd_movie_poster">The poster of the movie.</string>

@@ -21,49 +21,59 @@ public class Movie implements Parcelable {
 		}
 
 	};
-	
+
 	private int mTmdbId;
 
 	private String mTitle;
 	private String mDirector;
 	private List<String> mActors;
 	private List<Genre> mGenres;
-	
+
 	private String mDescription;
 	private String mTagline;
-	//Duration in minutes
+	// Duration in minutes
 	private int mDuration;
 	private String mMPAARating;
-	
+
 	private int mReleaseYear;
 
 	private String mPosterUrl;
 	private String mTrailerUrl;
-	
+
 	private String mRTRating;
 	private int mRTScore;
-	
+
 	private String mGooglePlayPurchaseUrl;
 
+	@Deprecated
 	public Movie(String title) {
 		this.mTitle = title;
 	}
 
+	public Movie(String title, String director, List<String> actors,
+			List<Genre> genres) {
+		mTitle = title;
+		mDirector = director;
+		mActors = actors;
+		mGenres = genres;
+	}
+
+	@Deprecated
 	public Movie(String title, String director, List<String> actors) {
 		mTitle = title;
 		mDirector = director;
 		mActors = actors;
 	}
-	
+
 	protected Movie(Parcel in) {
 		mTmdbId = in.readInt();
-		
+
 		mTitle = in.readString();
 		mDirector = in.readString();
-		
+
 		mActors = new ArrayList<String>();
 		in.readStringList(mActors);
-		
+
 		mGenres = in.createTypedArrayList(Genre.CREATOR);
 		mDescription = in.readString();
 		mTagline = in.readString();
@@ -71,7 +81,7 @@ public class Movie implements Parcelable {
 		mReleaseYear = in.readInt();
 		mPosterUrl = in.readString();
 		mTrailerUrl = in.readString();
-		
+
 		mGooglePlayPurchaseUrl = in.readString();
 	}
 
@@ -94,7 +104,7 @@ public class Movie implements Parcelable {
 		dest.writeInt(mReleaseYear);
 		dest.writeString(mPosterUrl);
 		dest.writeString(mTrailerUrl);
-		
+
 		dest.writeString(mGooglePlayPurchaseUrl);
 	}
 
@@ -133,7 +143,7 @@ public class Movie implements Parcelable {
 	// }
 	//
 	// }
-	
+
 	public int getTmdbId() {
 		return mTmdbId;
 	}
@@ -141,7 +151,7 @@ public class Movie implements Parcelable {
 	public void setTmdbId(int tmdbId) {
 		this.mTmdbId = tmdbId;
 	}
-	
+
 	public String getTitle() {
 		return mTitle;
 	}
@@ -173,7 +183,7 @@ public class Movie implements Parcelable {
 	public void setGenres(List<Genre> genres) {
 		this.mGenres = genres;
 	}
-	
+
 	public String getDescription() {
 		return mDescription;
 	}
@@ -197,7 +207,7 @@ public class Movie implements Parcelable {
 	public void setDuration(int duration) {
 		this.mDuration = duration;
 	}
-	
+
 	public String getMPAARating() {
 		return mMPAARating;
 	}
@@ -205,7 +215,7 @@ public class Movie implements Parcelable {
 	public void setMPAARating(String mpaaRating) {
 		this.mMPAARating = mpaaRating;
 	}
-	
+
 	public int getReleaseYear() {
 		return mReleaseYear;
 	}
@@ -213,15 +223,15 @@ public class Movie implements Parcelable {
 	public void setReleaseYear(int releaseYear) {
 		this.mReleaseYear = releaseYear;
 	}
-	
+
 	public String getPosterUrl() {
 		return this.mPosterUrl;
 	}
-	
+
 	public void setPosterUrl(String posterUrl) {
 		this.mPosterUrl = posterUrl;
 	}
-	
+
 	public String getTrailerUrl() {
 		return mTrailerUrl;
 	}
@@ -229,7 +239,7 @@ public class Movie implements Parcelable {
 	public void setTrailerUrl(String trailerUrl) {
 		this.mTrailerUrl = trailerUrl;
 	}
-	
+
 	public String getRTRating() {
 		return mRTRating;
 	}
@@ -245,7 +255,7 @@ public class Movie implements Parcelable {
 	public void setRTScore(int rtScore) {
 		this.mRTScore = rtScore;
 	}
-	
+
 	public String getGooglePlayPurchaseUrl() {
 		return mGooglePlayPurchaseUrl;
 	}

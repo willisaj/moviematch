@@ -47,4 +47,9 @@ public class CheckableView extends RelativeLayout {
 		return mNameTextView.getText().toString();
 	}
 
+	public void setUnselected() {
+		isSelected = false;
+		this.setBackgroundResource(android.R.drawable.list_selector_background);
+	}
+
 }
