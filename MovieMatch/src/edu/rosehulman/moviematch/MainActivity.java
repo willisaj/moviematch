@@ -2,6 +2,7 @@ package edu.rosehulman.moviematch;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -19,6 +20,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import com.appspot.willisaj_movie_match.moviematch.model.ActorPreference;
 
 public class MainActivity extends Activity implements OnClickListener {
 	public static final String KEY_TITLE = "KEY_TITLE";
