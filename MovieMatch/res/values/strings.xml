@@ -43,8 +43,12 @@
     <string name="cancel">Cancel</string>
     <string name="username_hint">Username</string>
     <string name="password_hint">Password</string>
+    <string name="email_hint">Email</string>
     <string name="success">Success</string>
     <string name="okay">Okay</string>
+    <string name="signup">Signup</string>
+    <string name="logout">Log Out</string>
+    <string name="logged_out_status">You are currently not logged in.</string>
     
     <string name="purchase_google_play">Google Play</string>
     <string name="purchase_amazon">Amazon</string>
@@ -52,6 +56,10 @@
     <string name="login_fail_message">Login Failed</string>
     <string name="login_success_message">Login Successful</string>
     <string name="login_invalid_message">Invalid Username or Password</string>
+    <string name="signup_fail_message">Signup Failed</string>
+    <string name="signup_success_message">Your account has been registered</string>
+    <string name="signup_invalid_message">The current username already exists</string>
+    <string name="logout_success_message">You have been logged out.</string>
 
     <!-- ImageView Content Descriptions -->
     <string name="cd_movie_poster">The poster of the movie.</string>

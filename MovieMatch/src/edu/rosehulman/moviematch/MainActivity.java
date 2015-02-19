@@ -23,6 +23,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+
 import com.appspot.willisaj_movie_match.moviematch.model.Account;
 
 public class MainActivity extends Activity implements OnClickListener {
@@ -34,8 +35,13 @@ public class MainActivity extends Activity implements OnClickListener {
 	private EditText mActorEditText;
 	private EditText mDirectorEditText;
 	private Spinner mGenreSpinner;
-	
+
 	private Button mLoginButton;
+	private Button mSignupButton;
+	private Button mLogoutButton;
+	private TextView mLoginStatusText;
+
+	private String mUserName;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -89,12 +95,13 @@ public class MainActivity extends Activity implements OnClickListener {
 
 					}
 				});
+		distributionSpinner.setVisibility(View.GONE);
 
 		Button wishListButton = (Button) findViewById(R.id.wishlist_button);
 		Button recommendButton = (Button) findViewById(R.id.recommend_movie_button);
 		wishListButton.setOnClickListener(this);
 		recommendButton.setOnClickListener(this);
-		
+
 		mLoginButton = (Button) findViewById(R.id.login_button);
 		mLoginButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -102,6 +109,38 @@ public class MainActivity extends Activity implements OnClickListener {
 				loginButtonClicked();
 			}
 		});
+
+		mSignupButton = (Button) findViewById(R.id.signup_button);
+		mSignupButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				signupButtonClicked();
+			}
+		});
+
+		mLogoutButton = (Button) findViewById(R.id.logout_button);
+		mLogoutButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				logoutButtonClicked();
+			}
+		});
+		
+		mLoginStatusText = (TextView) findViewById(R.id.login_status);
+	}
+
+	private void updateLoginVisibility() {
+		if (mUserName == null) {
+			mLoginButton.setVisibility(View.VISIBLE);
+			mSignupButton.setVisibility(View.VISIBLE);
+			mLogoutButton.setVisibility(View.GONE);
+			mLoginStatusText.setText(R.string.logged_out_status);
+		} else {
+			mLoginButton.setVisibility(View.GONE);
+			mSignupButton.setVisibility(View.GONE);
+			mLogoutButton.setVisibility(View.VISIBLE);
+			mLoginStatusText.setText("Logged in as " + mUserName);
+		}
 	}
 
 	protected void startRecommendationActivity() {
@@ -124,9 +163,12 @@ public class MainActivity extends Activity implements OnClickListener {
 
 		List<Movie> movies = recommendation.getMovies();
 
-		Preferences preferences = Preferences.getPreferencesForUser("willisaj");
+		if (mUserName != null) {
+			Preferences preferences = Preferences
+					.getPreferencesForUser(mUserName);
 
-		Collections.sort(movies, new MovieComparator(preferences));
+			Collections.sort(movies, new MovieComparator(preferences));
+		}
 
 		intent.putExtra(KEY_TITLE, "Recommendations");
 		intent.putExtra(KEY_MOVIE_LIST, (ArrayList<Movie>) movies);
@@ -171,34 +213,84 @@ public class MainActivity extends Activity implements OnClickListener {
 				});
 		return true;
 	}
-	
+
 	private void loginButtonClicked() {
 		LayoutInflater inflater = getLayoutInflater();
-		
+
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle(getString(R.string.login));
 		final View loginDialog = inflater.inflate(R.layout.dialog_login, null);
 		builder.setView(loginDialog);
-		
-		builder.setPositiveButton(getString(R.string.login), new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				EditText usernameText = (EditText) loginDialog.findViewById(R.id.username_editText);
-				EditText passwordText = (EditText) loginDialog.findViewById(R.id.password_editText);
-				
-				attemptLogin(usernameText.getText().toString(), passwordText.getText().toString());
-			}
-		});
-		builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
 
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				//do nothing
-			}
-		});
+		builder.setPositiveButton(getString(R.string.login),
+				new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						EditText usernameText = (EditText) loginDialog
+								.findViewById(R.id.username_editText);
+						EditText passwordText = (EditText) loginDialog
+								.findViewById(R.id.password_editText);
+
+						attemptLogin(usernameText.getText().toString(),
+								passwordText.getText().toString());
+					}
+				});
+		builder.setNegativeButton(getString(R.string.cancel),
+				new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// do nothing
+					}
+				});
 		builder.show();
 	}
-	
+
+	private void signupButtonClicked() {
+		LayoutInflater inflater = getLayoutInflater();
+
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle(getString(R.string.signup));
+		final View signupDialog = inflater
+				.inflate(R.layout.dialog_signup, null);
+		builder.setView(signupDialog);
+
+		builder.setPositiveButton(getString(R.string.signup),
+				new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						EditText usernameText = (EditText) signupDialog
+								.findViewById(R.id.username_editText);
+						EditText passwordText = (EditText) signupDialog
+								.findViewById(R.id.password_editText);
+						EditText emailText = (EditText) signupDialog
+								.findViewById(R.id.email_editText);
+
+						attemptSignup(usernameText.getText().toString(),
+								passwordText.getText().toString(),
+								emailText.toString(), false);
+					}
+				});
+		builder.setNegativeButton(getString(R.string.cancel),
+				new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// do nothing
+					}
+				});
+		builder.show();
+	}
+
+	private void logoutButtonClicked() {
+		mUserName = null;
+
+		alertMessage(getString(R.string.logout),
+				getString(R.string.logout_success_message));
+
+		updateLoginVisibility();
+	}
+
 	private void attemptLogin(String userName, String password) {
 		try {
 			Account account = BackendApi.getAccount(userName);
@@ -210,25 +302,53 @@ public class MainActivity extends Activity implements OnClickListener {
 				String title = getString(R.string.success);
 				String message = getString(R.string.login_success_message);
 				alertMessage(title, message);
+
+				mUserName = userName;
+				updateLoginVisibility();
 			}
 		} catch (Exception e) {
 			String title = getString(R.string.error);
 			String message = getString(R.string.login_fail_message);
 			alertMessage(title, message);
 		}
-		
+
 	}
-	
+
+	private void attemptSignup(String userName, String password, String email,
+			boolean willShare) {
+		try {
+			Account account = BackendApi.getAccount(userName);
+			if (account != null) {
+				String title = getString(R.string.error);
+				String message = getString(R.string.signup_invalid_message);
+				alertMessage(title, message);
+			} else {
+				BackendApi.insertAccount(userName, password, email, willShare);
+
+				String title = getString(R.string.success);
+				String message = getString(R.string.signup_success_message);
+				alertMessage(title, message);
+
+				attemptLogin(userName, password);
+			}
+		} catch (Exception e) {
+			String title = getString(R.string.error);
+			String message = getString(R.string.signup_fail_message);
+			alertMessage(title, message);
+		}
+	}
+
 	private void alertMessage(String title, String message) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle(title);
 		builder.setMessage(message);
-		builder.setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				//do nothing
-			}
-		});
+		builder.setPositiveButton(R.string.okay,
+				new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// do nothing
+					}
+				});
 		builder.show();
 	}
 
