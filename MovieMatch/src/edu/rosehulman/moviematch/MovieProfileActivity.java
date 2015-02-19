@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.RatingBar.OnRatingBarChangeListener;
 import android.widget.TextView;
@@ -69,6 +70,9 @@ public class MovieProfileActivity extends Activity implements OnClickListener,
 
 		mTaglineView = (TextView) findViewById(R.id.posterCaptionTitleView);
 		mTaglineView.setText("\"" + mMovie.getTagline() + "\"");
+		if (mMovie.getTagline().equals("")) {
+			mTaglineView.setVisibility(View.GONE);
+		}
 
 		mDescriptionView = (TextView) findViewById(R.id.description);
 		mDescriptionView.setText(mMovie.getDescription());
@@ -95,6 +99,9 @@ public class MovieProfileActivity extends Activity implements OnClickListener,
 
 			mRTScoreView = (TextView) findViewById(R.id.rottenScore);
 			mRTScoreView.setText(mMovie.getRTScore() + "%");
+		} else {
+			LinearLayout rottenTomatoes = (LinearLayout) findViewById(R.id.rottenTomatoes);
+			rottenTomatoes.setVisibility(View.GONE);
 		}
 
 		// Google Play
@@ -144,8 +151,6 @@ public class MovieProfileActivity extends Activity implements OnClickListener,
 		mMoviePortrait = (ImageView) findViewById(R.id.moviePortrait);
 		new DownloadImageTask(mMoviePortrait).execute(mMovie.getPosterUrl());
 
-		TextView metacriticRatingView = (TextView) findViewById(R.id.metacriticRating);
-		RatingBar ratingBar = (RatingBar) findViewById(R.id.ratingBar);
 		this.wishListButton = (Button) findViewById(R.id.wishListButton);
 
 		if (this.isOnWishList) {
@@ -156,11 +161,6 @@ public class MovieProfileActivity extends Activity implements OnClickListener,
 			this.wishListButton.setText(ADD_TO_WISHLIST);
 		}
 		this.wishListButton.setOnClickListener(this);
-
-		ratingBar.setRating((float) this.rating);
-		ratingBar.setOnRatingBarChangeListener(this);
-
-		metacriticRatingView.setText("" + metacriticRating);
 
 	}
 

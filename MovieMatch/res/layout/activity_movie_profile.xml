@@ -14,7 +14,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:text="@string/error"
+            android:text="@string/loading"
             android:textSize="25sp" />
 
         <ImageView
@@ -32,7 +32,9 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/moviePortrait"
             android:layout_centerHorizontal="true"
-            android:text="@string/error"
+            android:paddingTop="3dp"
+            android:textSize="15sp"
+            android:text="@string/loading"
             android:textStyle="italic" />
 
         <LinearLayout
@@ -40,6 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
+            android:paddingTop="5dp"
             android:layout_below="@id/posterCaptionTitleView"
             android:orientation="horizontal" >
 
@@ -54,48 +57,20 @@
                 android:id="@+id/rottenScore"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/error"
+                android:text="@string/loading"
+                android:paddingLeft="5sp"
                 android:textSize="30sp" />
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/metacriticRating"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_below="@id/posterCaptionTitleView"
-            android:text="@string/error" />
-
-        <TextView
-            android:id="@+id/metacriticLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/posterCaptionTitleView"
-            android:layout_toRightOf="@id/metacriticRating"
-            android:text="@string/metacritic" />
-
-        <TextView
-            android:id="@+id/myRatingLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@id/rottenTomatoes"
-            android:text="@string/my_rating" />
-
-        <RatingBar
-            android:id="@+id/ratingBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/rottenTomatoes"
-            android:layout_toRightOf="@id/myRatingLabel" />
 
         <TextView
             android:id="@+id/description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_below="@id/ratingBar"
-            android:text="@string/error" />
+            android:layout_below="@id/rottenTomatoes"
+            android:paddingTop="5dp"
+            android:textSize="17sp"
+            android:text="@string/loading" />
 
         <TextView
             android:id="@+id/lengthLabel"
@@ -103,6 +78,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_below="@id/description"
+            android:paddingTop="5dp"
+            android:textSize="17sp"
             android:text="@string/length" />
 
         <TextView
@@ -111,7 +88,9 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/description"
             android:layout_toRightOf="@id/lengthLabel"
-            android:text="@string/error" />
+            android:paddingTop="5dp"
+            android:textSize="17sp"
+            android:text="@string/loading" />
 
         <TextView
             android:id="@+id/mpaaLabel"
@@ -119,6 +98,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_below="@id/lengthLabel"
+            android:paddingTop="5dp"
+            android:textSize="17sp"
             android:text="@string/rating" />
 
         <TextView
@@ -127,7 +108,9 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/lengthLabel"
             android:layout_toRightOf="@id/mpaaLabel"
-            android:text="@string/error" />
+            android:paddingTop="5dp"
+            android:textSize="17sp"
+            android:text="@string/loading" />
 
         <LinearLayout
             android:id="@+id/distributionButtons"
@@ -135,6 +118,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/mpaaTextView"
             android:layout_centerHorizontal="true"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:orientation="vertical" >
 
             <Button
@@ -163,7 +148,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/distributionButtons"
             android:layout_centerHorizontal="true"
-            android:text="@string/error" />
+            android:text="@string/loading" />
     </RelativeLayout>
 
 </ScrollView>

@@ -49,6 +49,7 @@
     <string name="signup">Signup</string>
     <string name="logout">Log Out</string>
     <string name="logged_out_status">You are currently not logged in.</string>
+    <string name="loading">Loading…</string>
     
     <string name="purchase_google_play">Google Play</string>
     <string name="purchase_amazon">Amazon</string>
