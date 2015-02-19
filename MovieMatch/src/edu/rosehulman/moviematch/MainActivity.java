@@ -1,6 +1,7 @@
 package edu.rosehulman.moviematch;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -111,6 +112,12 @@ public class MainActivity extends Activity implements OnClickListener {
 		}
 
 		List<Movie> movies = recommendation.getMovies();
+		
+		Preferences preferences = new Preferences();
+		//preferences.addActor(new RatablePerson("Vincent Price", 5));
+		//preferences.addDirector(new RatablePerson("Tim Burton", 1));
+		
+		Collections.sort(movies, new MovieComparator(preferences));
 
 		intent.putExtra(KEY_TITLE, "Recommendations");
 		intent.putExtra(KEY_MOVIE_LIST, (ArrayList<Movie>) movies);
