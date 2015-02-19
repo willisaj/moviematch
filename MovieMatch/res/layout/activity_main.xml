@@ -42,10 +42,44 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <Button
-        android:id="@+id/wishlist_button"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/optionButtons"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:text="@string/wishlist" />
+        android:layout_gravity="center"
+        android:orientation="vertical" >
 
+        <Button
+            android:id="@+id/wishlist_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/wishlist" />
+        
+        <Button
+            android:id="@+id/login_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/login" />
+        
+        <Button
+            android:id="@+id/signup_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/signup" />
+        
+        <Button
+            android:id="@+id/logout_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/logout" />
+    </LinearLayout>
+    
+    <TextView
+            android:id="@+id/login_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="8dp"
+            android:textSize="25sp"
+            android:text="@string/logged_out_status" />
 </LinearLayout>
