@@ -353,6 +353,8 @@ public class MainActivity extends Activity implements OnClickListener {
 	}
 
 	protected void startPreferencesActivity() {
-		this.startActivity(new Intent(this, PreferencesActivity.class));
+		Intent prefIntent = new Intent(this, PreferencesActivity.class);
+		prefIntent.putExtra(PreferencesActivity.KEY_USER_NAME, mUserName != null ? mUserName : "");
+		this.startActivity(prefIntent);
 	}
 }

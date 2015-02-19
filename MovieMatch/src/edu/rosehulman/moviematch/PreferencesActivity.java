@@ -42,10 +42,14 @@ public class PreferencesActivity extends Activity {
 	private ArrayAdapter<String> selectedPlatformAdapter;
 	private ArrayList<RatablePerson> actorList;
 	private ArrayList<RatablePerson> directorList;
-	private String userName = "willisaj";
+	private String userName = "";
+	
+	public static String KEY_USER_NAME = "KEY_USER_NAME";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		userName = this.getIntent().getStringExtra(KEY_USER_NAME);
+		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_preferences);
 

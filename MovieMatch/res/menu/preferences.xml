@@ -18,9 +18,9 @@
         android:id="@+id/merge_preferences_item"
         android:showAsAction="never"
         android:title="@string/menu_merge_preferences"/>
-    <item
+    <!--  <item
         android:id="@+id/create_preferences_item"
         android:showAsAction="never"
-        android:title="@string/menu_create_preferences"/>
+        android:title="@string/menu_create_preferences"/> -->
 
 </menu>
