@@ -431,7 +431,7 @@ public class PreferencesActivity extends Activity {
 							@Override
 							public void onClick(DialogInterface dialog,
 									int which) {
-								loadPreferences();
+								loadPreferencesFromCloud();
 								dialog.dismiss();
 							}
 						});
@@ -463,12 +463,14 @@ public class PreferencesActivity extends Activity {
 
 			for (RatablePerson person : actors) {
 				actorList.add(person);
-				Log.d("Foo","Foo loading could prefs");
+				mMovieDataAdapter.addActor(person);
+				Log.d("Foo", "Foo loading could prefs");
 			}
 
 			List<RatablePerson> directors = BackendApi
 					.getRatedDirectorsForUser(user_Name);
 			for (RatablePerson person : directors) {
+				mMovieDataAdapter.addDirector(person);
 				directorList.add(person);
 			}
 
@@ -479,6 +481,16 @@ public class PreferencesActivity extends Activity {
 						localGenre.setPreference(1);
 						break;
 					}
+				}
+			}
+			
+			mMovieDataAdapter.clearCheckablePreferences();
+
+			mMovieDataAdapter.addGenres(genreList);
+			selectedGenreList.clear();
+			for (Genre genre : genreList) {
+				if (genre.getPreference() == 1) {
+					selectedGenreList.add(genre.getName());
 				}
 			}
 
@@ -493,6 +505,14 @@ public class PreferencesActivity extends Activity {
 				}
 			}
 
+			mMovieDataAdapter.addPlatforms(platformList);
+			selectedPlatformList.clear();
+			for (Platform platform : platformList) {
+				if (platform.getPreference() == 1) {
+					selectedPlatformList.add(platform.getName());
+				}
+			}
+
 			List<MPAA> mpaas = BackendApi.getRatedRatingsForUser(user_Name);
 			for (MPAA mpaa : mpaas) {
 				for (MPAA localMPAA : mpaaList) {
@@ -500,6 +520,14 @@ public class PreferencesActivity extends Activity {
 						localMPAA.setPreference(1);
 						break;
 					}
+				}
+			}
+
+			mMovieDataAdapter.addMPAAs(mpaaList);
+			selectedMPAAList.clear();
+			for (MPAA mpaa : mpaaList) {
+				if (mpaa.getPreference() == 1) {
+					selectedMPAAList.add(mpaa.getName());
 				}
 			}
 
@@ -519,7 +547,7 @@ public class PreferencesActivity extends Activity {
 
 	protected void loadPreferencesFromCloud() {
 		clearAllPreferences();
-		//mergePreferencesWithUser(userName);
+		mergePreferencesWithUser(userName);
 	}
 
 	protected void savePreferencesToCloud() {

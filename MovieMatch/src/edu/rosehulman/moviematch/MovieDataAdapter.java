@@ -211,6 +211,16 @@ public class MovieDataAdapter {
 			db.execSQL(CREATE_PLATFORMS_STATEMENT);
 		}
 
+		public void clearCheckablePreferences(SQLiteDatabase db) {
+			db.execSQL(DROP_GENRES_STATEMENT);
+			db.execSQL(DROP_MPAA_STATEMENT);
+			db.execSQL(DROP_PLATFORMS_STATEMENT);
+			db.execSQL(CREATE_GENRES_STATEMENT);
+			db.execSQL(CREATE_MPAA_STATEMENT);
+			db.execSQL(CREATE_PLATFORMS_STATEMENT);
+
+		}
+
 	}
 
 	private SQLiteOpenHelper mOpenHelper;
@@ -278,7 +288,7 @@ public class MovieDataAdapter {
 		String name = cursor.getString(cursor
 				.getColumnIndexOrThrow(KEY_ACTOR_NAME));
 		float rating = cursor.getFloat(cursor
-				.getColumnIndexOrThrow(KEY_ACTOR_NAME));
+				.getColumnIndexOrThrow(KEY_ACTOR_RATING));
 		return new RatablePerson(name, rating);
 	}
 
@@ -571,6 +581,11 @@ public class MovieDataAdapter {
 		int preference = cursor.getInt(cursor
 				.getColumnIndexOrThrow(KEY_PLATFORM_PREFERENCE));
 		return new Platform(name, preference);
+	}
+
+	public void clearCheckablePreferences() {
+		((MovieDBHelper) mOpenHelper).clearCheckablePreferences(mDatabase);
+
 	}
 
 }
