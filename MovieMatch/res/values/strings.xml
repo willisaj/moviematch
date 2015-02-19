@@ -31,9 +31,19 @@
     <string name="edit_mpaa_title">Select or deselect desired MPAA ratings</string>
     <string name="mpaas">MPAA ratings:</string>
     <string name="platforms">Platforms:</string>
+    <string name="login">Login</string>
+    <string name="cancel">Cancel</string>
+    <string name="username_hint">Username</string>
+    <string name="password_hint">Password</string>
+    <string name="success">Success</string>
+    <string name="okay">Okay</string>
     
     <string name="purchase_google_play">Google Play</string>
     <string name="purchase_amazon">Amazon</string>
+    
+    <string name="login_fail_message">Login Failed</string>
+    <string name="login_success_message">Login Successful</string>
+    <string name="login_invalid_message">Invalid Username or Password</string>
 
     <!-- ImageView Content Descriptions -->
     <string name="cd_movie_poster">The poster of the movie.</string>

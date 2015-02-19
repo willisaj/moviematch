@@ -3,12 +3,14 @@ package edu.rosehulman.moviematch;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
@@ -22,7 +24,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.appspot.willisaj_movie_match.moviematch.model.ActorPreference;
+import com.appspot.willisaj_movie_match.moviematch.model.Account;
 
 public class MainActivity extends Activity implements OnClickListener {
 	public static final String KEY_TITLE = "KEY_TITLE";
@@ -33,6 +35,8 @@ public class MainActivity extends Activity implements OnClickListener {
 	private EditText mActorEditText;
 	private EditText mDirectorEditText;
 	private Spinner mGenreSpinner;
+	
+	private Button mLoginButton;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +95,14 @@ public class MainActivity extends Activity implements OnClickListener {
 		Button recommendButton = (Button) findViewById(R.id.recommend_movie_button);
 		wishListButton.setOnClickListener(this);
 		recommendButton.setOnClickListener(this);
+		
+		mLoginButton = (Button) findViewById(R.id.login_button);
+		mLoginButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				loginButtonClicked();
+			}
+		});
 	}
 
 	protected void startRecommendationActivity() {
@@ -208,6 +220,66 @@ public class MainActivity extends Activity implements OnClickListener {
 					}
 				});
 		return true;
+	}
+	
+	private void loginButtonClicked() {
+		LayoutInflater inflater = getLayoutInflater();
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle(getString(R.string.login));
+		final View loginDialog = inflater.inflate(R.layout.dialog_login, null);
+		builder.setView(loginDialog);
+		
+		builder.setPositiveButton(getString(R.string.login), new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				EditText usernameText = (EditText) loginDialog.findViewById(R.id.username_editText);
+				EditText passwordText = (EditText) loginDialog.findViewById(R.id.password_editText);
+				
+				attemptLogin(usernameText.getText().toString(), passwordText.getText().toString());
+			}
+		});
+		builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				//do nothing
+			}
+		});
+		builder.show();
+	}
+	
+	private void attemptLogin(String userName, String password) {
+		try {
+			Account account = BackendApi.getAccount(userName);
+			if (account == null || !account.getPassword().equals(password)) {
+				String title = getString(R.string.error);
+				String message = getString(R.string.login_invalid_message);
+				alertMessage(title, message);
+			} else {
+				String title = getString(R.string.success);
+				String message = getString(R.string.login_success_message);
+				alertMessage(title, message);
+			}
+		} catch (Exception e) {
+			String title = getString(R.string.error);
+			String message = getString(R.string.login_fail_message);
+			alertMessage(title, message);
+		}
+		
+	}
+	
+	private void alertMessage(String title, String message) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle(title);
+		builder.setMessage(message);
+		builder.setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				//do nothing
+			}
+		});
+		builder.show();
 	}
 
 	protected void startPreferencesActivity() {
