@@ -39,14 +39,25 @@
     <string name="delete_director_message">By long-clicking this Director, you have selected to delete them.  Are you sure?</string>
     <string name="delete_preferences_title">Clear Preferences</string>
     <string name="delete_preferences_message">Are you sure that you would like to clear all of your preferences?  This cannot be undone.</string>
-
+    <string name="menu_load_preferences">Load Preferences</string>
+    <string name="menu_save_preferences">Save Preferences</string>
+    <string name="menu_create_preferences">Create Account</string>
+    <string name="menu_merge_preferences">Merge Preferences</string>
     <string name="purchase_google_play">Google Play</string>
     <string name="purchase_amazon">Amazon</string>
-    
+    <string name="user_merge_message">Warning: You are selecting to merge your preferences with another account.  This cannot be undone.</string>
+    <string name="user_merge_hint">Enter the user name of the account to merge</string>
+    <string name="user_merge_dialog">Merge your preferences with a friend!</string>
+    <string name="save_preferences_title">Save Preferences to Cloud</string>
+    <string name="save_preferences_message">Warning: You are selecting to save your preferences to the cloud.  This will overwrite any previously saved preferences there.</string>
+    <string name="load_preferences_title">load Preferences from Cloud</string>
+    <string name="load_preferences_message">Warning: You are selecting to load your preferences from the cloud.  This will overwrite your locally-saved preferences.</string>
+
     <!-- ImageView Content Descriptions -->
     <string name="cd_movie_poster">The poster of the movie.</string>
     <string name="cd_rt_rating">The icon for the RottenTomatoes Critics Approval Rating</string>
     <string name="title_activity_trailer">TrailerActivity</string>
     <string name="title_activity_preferences">Preferences</string>
     <string name="title_activity_movie_wish_list">MovieWishListActivity</string>
+
 </resources>

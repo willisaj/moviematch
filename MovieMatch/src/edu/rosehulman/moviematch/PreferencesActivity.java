@@ -1,6 +1,11 @@
 package edu.rosehulman.moviematch;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+
+import com.appspot.willisaj_movie_match.moviematch.model.Account;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -37,6 +42,7 @@ public class PreferencesActivity extends Activity {
 	private ArrayAdapter<String> selectedPlatformAdapter;
 	private ArrayList<RatablePerson> actorList;
 	private ArrayList<RatablePerson> directorList;
+	private String userName = "willisaj";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -242,6 +248,47 @@ public class PreferencesActivity extends Activity {
 						return false;
 					}
 				});
+
+		menu.getItem(1).setOnMenuItemClickListener(
+				new OnMenuItemClickListener() {
+
+					@Override
+					public boolean onMenuItemClick(MenuItem item) {
+						showSavePreferencesDialog();
+						return false;
+					}
+				});
+
+		menu.getItem(2).setOnMenuItemClickListener(
+				new OnMenuItemClickListener() {
+
+					@Override
+					public boolean onMenuItemClick(MenuItem item) {
+						showLoadPreferencesDialog();
+						return false;
+					}
+				});
+
+		menu.getItem(3).setOnMenuItemClickListener(
+				new OnMenuItemClickListener() {
+
+					@Override
+					public boolean onMenuItemClick(MenuItem item) {
+						showMergePreferencesDialog();
+						return false;
+					}
+				});
+
+		// menu.getItem(4).setOnMenuItemClickListener(
+		// new OnMenuItemClickListener() {
+		//
+		// @Override
+		// public boolean onMenuItemClick(MenuItem item) {
+		// createCloudAccount("willisaj", "change",
+		// "willisaj@rose", true);
+		// return false;
+		// }
+		// });
 		return true;
 	}
 
@@ -256,6 +303,313 @@ public class PreferencesActivity extends Activity {
 	// }
 	// return super.onOptionsItemSelected(item);
 	// }
+
+	// protected void createCloudAccount(String userName, String password,
+	// String email, boolean publicAccessible) {
+	// try {
+	// BackendApi.insertAccount(userName, password, email,
+	// publicAccessible);
+	// } catch (InterruptedException e) {
+	// e.printStackTrace();
+	// } catch (ExecutionException e) {
+	// e.printStackTrace();
+	// }
+	// }
+
+	protected void showMergePreferencesDialog() {
+		DialogFragment df = new DialogFragment() {
+			private UserMergeView mv;
+
+			@Override
+			public Dialog onCreateDialog(Bundle savedInstanceState) {
+				AlertDialog.Builder builder = new AlertDialog.Builder(
+						getActivity());
+
+				mv = new UserMergeView(getActivity());
+
+				builder.setTitle(R.string.user_merge_dialog);
+
+				builder.setView(mv);
+
+				builder.setPositiveButton(android.R.string.ok,
+						new DialogInterface.OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								initializeMerge();
+								dialog.dismiss();
+
+							}
+						});
+				builder.setNegativeButton(android.R.string.cancel,
+						new DialogInterface.OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								dialog.dismiss();
+							}
+						});
+
+				return builder.create();
+			}
+
+			private void initializeMerge() {
+
+				String name = mv.getUserName();
+
+				if (!name.equals("")) {
+					mergePreferencesWithUser(name);
+				} else {
+					Toast.makeText(getActivity(),
+							"You didn't enter in a name, silly!\n  Try again.",
+							Toast.LENGTH_SHORT).show();
+				}
+			}
+		};
+
+		df.show(getFragmentManager(), "merging user preferences");
+	}
+
+	protected void showSavePreferencesDialog() {
+		DialogFragment df = new DialogFragment() {
+
+			@Override
+			public Dialog onCreateDialog(Bundle savedInstanceState) {
+				AlertDialog.Builder builder = new AlertDialog.Builder(
+						getActivity());
+
+				// set options
+				builder.setTitle(R.string.save_preferences_title);
+				builder.setMessage(R.string.save_preferences_message);
+
+				builder.setPositiveButton(android.R.string.ok,
+						new DialogInterface.OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								savePreferencesToCloud();
+								dialog.dismiss();
+							}
+						});
+
+				builder.setNegativeButton(android.R.string.cancel,
+						new DialogInterface.OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								dialog.dismiss();
+							}
+						});
+
+				return builder.create();
+			}
+
+		};
+		df.show(getFragmentManager(), "saving preferences");
+
+	}
+
+	protected void showLoadPreferencesDialog() {
+		DialogFragment df = new DialogFragment() {
+
+			@Override
+			public Dialog onCreateDialog(Bundle savedInstanceState) {
+				AlertDialog.Builder builder = new AlertDialog.Builder(
+						getActivity());
+
+				// set options
+				builder.setTitle(R.string.load_preferences_title);
+				builder.setMessage(R.string.load_preferences_message);
+
+				builder.setPositiveButton(android.R.string.ok,
+						new DialogInterface.OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								loadPreferences();
+								dialog.dismiss();
+							}
+						});
+
+				builder.setNegativeButton(android.R.string.cancel,
+						new DialogInterface.OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								dialog.dismiss();
+							}
+						});
+
+				return builder.create();
+			}
+
+		};
+		df.show(getFragmentManager(), "loading preferences");
+
+	}
+
+	protected void mergePreferencesWithUser(String user_Name) {
+		// TODO save all data to database and selectedLists as you go, but don't
+		// add duplicates
+		try {
+			List<RatablePerson> actors = BackendApi
+					.getRatedActorsForUser(user_Name);
+
+			for (RatablePerson person : actors) {
+				actorList.add(person);
+				Log.d("Foo","Foo loading could prefs");
+			}
+
+			List<RatablePerson> directors = BackendApi
+					.getRatedDirectorsForUser(user_Name);
+			for (RatablePerson person : directors) {
+				directorList.add(person);
+			}
+
+			List<Genre> genres = BackendApi.getRatedGenresForUser(user_Name);
+			for (Genre genre : genres) {
+				for (Genre localGenre : genreList) {
+					if ((localGenre.getName()).equals(genre.getName())) {
+						localGenre.setPreference(1);
+						break;
+					}
+				}
+			}
+
+			List<Platform> platforms = BackendApi
+					.getRatedPlatformsForUser(user_Name);
+			for (Platform platform : platforms) {
+				for (Platform localPlatform : platformList) {
+					if ((localPlatform.getName()).equals(platform.getName())) {
+						localPlatform.setPreference(1);
+						break;
+					}
+				}
+			}
+
+			List<MPAA> mpaas = BackendApi.getRatedRatingsForUser(user_Name);
+			for (MPAA mpaa : mpaas) {
+				for (MPAA localMPAA : mpaaList) {
+					if ((localMPAA.getName()).equals(mpaa.getName())) {
+						localMPAA.setPreference(1);
+						break;
+					}
+				}
+			}
+
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
+
+		actorAdapter.notifyDataSetChanged();
+		directorAdapter.notifyDataSetChanged();
+		selectedGenreAdapter.notifyDataSetChanged();
+		selectedMPAAAdapter.notifyDataSetChanged();
+		selectedPlatformAdapter.notifyDataSetChanged();
+
+	}
+
+	protected void loadPreferencesFromCloud() {
+		clearAllPreferences();
+		//mergePreferencesWithUser(userName);
+	}
+
+	protected void savePreferencesToCloud() {
+
+		clearCloudAccountPreferences();
+		copyLocalPreferencesToCloudAccount();
+
+	}
+
+	private void clearCloudAccountPreferences() {
+		try {
+			List<RatablePerson> actors = BackendApi
+					.getRatedActorsForUser(userName);
+			for (RatablePerson person : actors) {
+				BackendApi.deleteRatedActorForUser(userName, person.getName());
+			}
+
+			List<RatablePerson> directors = BackendApi
+					.getRatedDirectorsForUser(userName);
+			for (RatablePerson person : directors) {
+				BackendApi.deleteRatedDirectorForUser(userName,
+						person.getName());
+			}
+
+			List<Genre> genres = BackendApi.getRatedGenresForUser(userName);
+			for (Genre genre : genres) {
+				BackendApi.deleteRatedGenreForUser(userName, genre.getName());
+			}
+
+			List<Platform> platforms = BackendApi
+					.getRatedPlatformsForUser(userName);
+			for (Platform platform : platforms) {
+				BackendApi.deleteRatedPlatformForUser(userName,
+						platform.getName());
+			}
+
+			List<MPAA> mpaas = BackendApi.getRatedRatingsForUser(userName);
+			for (MPAA mpaa : mpaas) {
+				BackendApi.deleteRatedMPAAForUser(userName, mpaa.getName());
+			}
+
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	private void copyLocalPreferencesToCloudAccount() {
+		try {
+
+			for (RatablePerson actor : actorList) {
+				BackendApi.insertRatedActorForUser(userName, actor.getName(),
+						actor.getRating());
+			}
+
+			for (RatablePerson director : directorList) {
+				BackendApi.insertRatedDirectorForUser(userName,
+						director.getName(), director.getRating());
+			}
+
+			for (Genre genre : genreList) {
+				if (genre.getPreference() == 1) {
+					BackendApi.insertRatedGenreForUser(userName,
+							genre.getName(), genre.getPreference());
+				}
+			}
+
+			for (Platform platform : platformList) {
+				if (platform.getPreference() == 1) {
+					BackendApi.insertRatedPlatformForUser(userName,
+							platform.getName(), platform.getPreference());
+				}
+			}
+
+			for (MPAA mpaa : mpaaList) {
+				if (mpaa.getPreference() == 1) {
+					BackendApi.insertRatedMPAAForUser(userName, mpaa.getName(),
+							mpaa.getPreference());
+				}
+			}
+
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
+
+	}
 
 	protected void showEditPlatformDialog() {
 		DialogFragment df = new DialogFragment() {
