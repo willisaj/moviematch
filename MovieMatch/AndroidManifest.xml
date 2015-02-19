@@ -41,6 +41,10 @@
             android:name=".PreferencesActivity"
             android:label="@string/title_activity_preferences" >
         </activity>
+        <activity
+            android:name=".MovieWishListActivity"
+            android:label="@string/title_activity_movie_wish_list" >
+        </activity>
     </application>
 
 </manifest>

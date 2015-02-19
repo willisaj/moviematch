@@ -1,7 +1,6 @@
 package edu.rosehulman.moviematch;
 
 import java.util.ArrayList;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -9,7 +8,10 @@ import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View.OnClickListener;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -21,8 +23,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 public class PreferencesActivity extends Activity {
-	private RatableRowAdapter actorAdapter;
-	private RatableRowAdapter directorAdapter;
+	private ArrayAdapter<RatablePerson> actorAdapter;
+	private ArrayAdapter<RatablePerson> directorAdapter;
 	private ArrayAdapter<String> selectedGenreAdapter;
 	private ArrayList<Genre> genreList;
 	private MovieDataAdapter mMovieDataAdapter;
@@ -30,14 +32,34 @@ public class PreferencesActivity extends Activity {
 	private ArrayList<MPAA> mpaaList;
 	private ArrayList<String> selectedMPAAList;
 	private ArrayAdapter<String> selectedMPAAAdapter;
+	private ArrayList<Platform> platformList;
+	private ArrayList<String> selectedPlatformList;
+	private ArrayAdapter<String> selectedPlatformAdapter;
+	private ArrayList<RatablePerson> actorList;
+	private ArrayList<RatablePerson> directorList;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_preferences);
 
+		loadPreferences();
+
+		configureListViews();
+
+		configureButtons();
+
+	}
+
+	private void loadPreferences() {
 		mMovieDataAdapter = new MovieDataAdapter(this);
 		mMovieDataAdapter.open();
+
+		actorList = new ArrayList<RatablePerson>();
+		mMovieDataAdapter.readActors(actorList);
+
+		directorList = new ArrayList<RatablePerson>();
+		mMovieDataAdapter.readDirectors(directorList);
 
 		genreList = new ArrayList<Genre>();
 		mMovieDataAdapter.readGenres(genreList);
@@ -63,6 +85,7 @@ public class PreferencesActivity extends Activity {
 			mpaaList.add(new MPAA("PG-13", 0));
 			mpaaList.add(new MPAA("R", 0));
 			mpaaList.add(new MPAA("NC-17", 0));
+			mMovieDataAdapter.addMPAAs(mpaaList);
 		}
 
 		selectedMPAAList = new ArrayList<String>();
@@ -72,18 +95,47 @@ public class PreferencesActivity extends Activity {
 			}
 		}
 
-		ArrayList<RatablePerson> actorList = null;
+		platformList = new ArrayList<Platform>();
+		mMovieDataAdapter.readPlatforms(platformList);
+		if (platformList.isEmpty()) {
+			platformList.add(new Platform("RedBox", 0));
+			platformList.add(new Platform("HULU", 0));
+			platformList.add(new Platform("In Theatres", 0));
+			platformList.add(new Platform("Google Play", 0));
+			platformList.add(new Platform("Amazon Prime", 0));
+			platformList.add(new Platform("YouTube", 0));
+			platformList.add(new Platform("Netflix", 0));
+			mMovieDataAdapter.addPlatforms(platformList);
+		}
 
+		selectedPlatformList = new ArrayList<String>();
+		for (Platform platform : platformList) {
+			if (platform.getPreference() == 1) {
+				selectedPlatformList.add(platform.getName());
+			}
+		}
+	}
+
+	private void configureListViews() {
+
+		// NonScrollListView actorListView = (NonScrollListView)
+		// findViewById(R.id.actor_mood_list_view);
+		// actorAdapter = new RatableRowAdapter(this, actorList);
+		// actorListView.setAdapter(actorAdapter);
 		NonScrollListView actorListView = (NonScrollListView) findViewById(R.id.actor_mood_list_view);
-		actorAdapter = new RatableRowAdapter(this, actorList);
+		actorAdapter = new ArrayAdapter<RatablePerson>(this,
+				android.R.layout.simple_list_item_1, actorList);
 		actorListView.setAdapter(actorAdapter);
 
-		ArrayList<RatablePerson> directorList = null;
-		AbsListView directorListView = (AbsListView) findViewById(R.id.director_mood_list_view);
-		directorAdapter = new RatableRowAdapter(this, directorList);
-		directorListView.setAdapter(directorAdapter);
+		// AbsListView directorListView = (AbsListView)
+		// findViewById(R.id.director_mood_list_view);
+		// directorAdapter = new RatableRowAdapter(this, directorList);
+		// directorListView.setAdapter(directorAdapter);
 
-		// TODO update values on changing the stars and delete on long click.
+		AbsListView directorListView = (AbsListView) findViewById(R.id.director_mood_list_view);
+		directorAdapter = new ArrayAdapter<RatablePerson>(this,
+				android.R.layout.simple_list_item_1, directorList);
+		directorListView.setAdapter(directorAdapter);
 
 		directorListView
 				.setOnItemLongClickListener(new OnItemLongClickListener() {
@@ -91,7 +143,7 @@ public class PreferencesActivity extends Activity {
 					@Override
 					public boolean onItemLongClick(AdapterView<?> parent,
 							View view, int position, long id) {
-						removeDirector(position);
+						showDeleteConfirmDialog(false, position);
 						return false;
 					}
 				});
@@ -101,10 +153,29 @@ public class PreferencesActivity extends Activity {
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				removeActor(position);
+				showDeleteConfirmDialog(true, position);
 				return true;
 			}
 		});
+
+		AbsListView selectedGenreListView = (AbsListView) findViewById(R.id.genre_mood_list_view);
+		selectedGenreAdapter = new ArrayAdapter<String>(this,
+				android.R.layout.simple_list_item_1, selectedGenreList);
+		selectedGenreListView.setAdapter(selectedGenreAdapter);
+
+		AbsListView selectedMPAAListView = (AbsListView) findViewById(R.id.mpaa_mood_list_view);
+		selectedMPAAAdapter = new ArrayAdapter<String>(this,
+				android.R.layout.simple_list_item_1, selectedMPAAList);
+		selectedMPAAListView.setAdapter(selectedMPAAAdapter);
+
+		AbsListView selectedPlatformListView = (AbsListView) findViewById(R.id.platform_mood_list_view);
+		selectedPlatformAdapter = new ArrayAdapter<String>(this,
+				android.R.layout.simple_list_item_1, selectedPlatformList);
+		selectedPlatformListView.setAdapter(selectedPlatformAdapter);
+
+	}
+
+	private void configureButtons() {
 
 		Button addActorButton = (Button) findViewById(R.id.addActorButton);
 		Button addDirectorButton = (Button) findViewById(R.id.addDirectorButton);
@@ -128,11 +199,6 @@ public class PreferencesActivity extends Activity {
 		addActorButton.setOnClickListener(addRatableListener);
 		addDirectorButton.setOnClickListener(addRatableListener);
 
-		AbsListView selectedGenreListView = (AbsListView) findViewById(R.id.genre_mood_list_view);
-		selectedGenreAdapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_list_item_1, selectedGenreList);
-		selectedGenreListView.setAdapter(selectedGenreAdapter);
-
 		Button editGenresButton = (Button) findViewById(R.id.editGenresButton);
 		editGenresButton.setOnClickListener(new OnClickListener() {
 
@@ -141,11 +207,6 @@ public class PreferencesActivity extends Activity {
 				showEditGenresDialog();
 			}
 		});
-
-		AbsListView selectedMPAAListView = (AbsListView) findViewById(R.id.mpaa_mood_list_view);
-		selectedMPAAAdapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_list_item_1, selectedMPAAList);
-		selectedMPAAListView.setAdapter(selectedMPAAAdapter);
 
 		Button editMPAAButton = (Button) findViewById(R.id.editMPAAsButton);
 		editMPAAButton.setOnClickListener(new OnClickListener() {
@@ -156,14 +217,33 @@ public class PreferencesActivity extends Activity {
 			}
 		});
 
+		Button editPlatformButton = (Button) findViewById(R.id.editPlatformsButton);
+		editPlatformButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				showEditPlatformDialog();
+			}
+		});
+
 	}
 
-	// @Override
-	// public boolean onCreateOptionsMenu(Menu menu) {
-	// // Inflate the menu; this adds items to the action bar if it is present.
-	// getMenuInflater().inflate(R.menu.preferences, menu);
-	// return true;
-	// }
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.preferences, menu);
+
+		menu.getItem(0).setOnMenuItemClickListener(
+				new OnMenuItemClickListener() {
+
+					@Override
+					public boolean onMenuItemClick(MenuItem item) {
+						showDeletePreferencesDialog();
+						return false;
+					}
+				});
+		return true;
+	}
 
 	// @Override
 	// public boolean onOptionsItemSelected(MenuItem item) {
@@ -176,6 +256,174 @@ public class PreferencesActivity extends Activity {
 	// }
 	// return super.onOptionsItemSelected(item);
 	// }
+
+	protected void showEditPlatformDialog() {
+		DialogFragment df = new DialogFragment() {
+			private ListView platformListView;
+
+			@Override
+			public Dialog onCreateDialog(Bundle savedInstanceState) {
+				AlertDialog.Builder builder = new AlertDialog.Builder(
+						getActivity());
+
+				// set options
+				builder.setTitle(R.string.edit_platform_title);
+
+				platformListView = new ListView(getActivity());
+				PlatformAdapter platformAdapter = new PlatformAdapter(
+						getActivity(), platformList);
+				platformListView.setAdapter(platformAdapter);
+
+				platformListView
+						.setOnItemClickListener(new OnItemClickListener() {
+
+							@Override
+							public void onItemClick(AdapterView<?> parent,
+									View view, int position, long id) {
+								((CheckableView) view).toggle();
+							}
+						});
+
+				builder.setView(platformListView);
+
+				builder.setPositiveButton(android.R.string.ok,
+						new DialogInterface.OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+
+								selectedPlatformList.clear();
+
+								for (int i = 0; i < platformListView
+										.getChildCount(); i++) {
+
+									if (((CheckableView) platformListView
+											.getChildAt(i)).isSelected()) {
+										(platformList.get(i)).setPreference(1);
+										selectedPlatformList.add(platformList
+												.get(i).getName());
+									} else {
+										(platformList.get(i)).setPreference(0);
+									}
+								}
+
+								updatePlatforms();
+
+								dialog.dismiss();
+
+							}
+
+						});
+				builder.setNegativeButton(android.R.string.cancel,
+						new DialogInterface.OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								dialog.dismiss();
+							}
+						});
+
+				return builder.create();
+			}
+
+		};
+
+		df.show(getFragmentManager(), "editing Platforms");
+
+	}
+
+	protected void showDeleteConfirmDialog(boolean isAct, int position) {
+		final int index = position;
+		final boolean isActor = isAct;
+		DialogFragment df = new DialogFragment() {
+
+			@Override
+			public Dialog onCreateDialog(Bundle savedInstanceState) {
+				AlertDialog.Builder builder = new AlertDialog.Builder(
+						getActivity());
+
+				// set options
+				if (isActor) {
+					builder.setTitle(R.string.delete_actor_title);
+					builder.setMessage(R.string.delete_actor_message);
+				} else {
+					builder.setTitle(R.string.delete_director_title);
+					builder.setMessage(R.string.delete_director_message);
+				}
+
+				builder.setPositiveButton(android.R.string.ok,
+						new DialogInterface.OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								if (isActor) {
+									removeActor(index);
+								} else {
+									removeDirector(index);
+								}
+								dialog.dismiss();
+							}
+						});
+
+				builder.setNegativeButton(android.R.string.cancel,
+						new DialogInterface.OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								dialog.dismiss();
+							}
+						});
+
+				return builder.create();
+			}
+
+		};
+		df.show(getFragmentManager(), "deleting person");
+	}
+
+	protected void showDeletePreferencesDialog() {
+		DialogFragment df = new DialogFragment() {
+
+			@Override
+			public Dialog onCreateDialog(Bundle savedInstanceState) {
+				AlertDialog.Builder builder = new AlertDialog.Builder(
+						getActivity());
+
+				// set options
+				builder.setTitle(R.string.delete_preferences_title);
+				builder.setMessage(R.string.delete_preferences_message);
+
+				builder.setPositiveButton(android.R.string.ok,
+						new DialogInterface.OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								clearAllPreferences();
+								dialog.dismiss();
+							}
+						});
+
+				builder.setNegativeButton(android.R.string.cancel,
+						new DialogInterface.OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								dialog.dismiss();
+							}
+						});
+
+				return builder.create();
+			}
+
+		};
+		df.show(getFragmentManager(), "deleting preferences");
+	}
 
 	protected void showEditMPAADialog() {
 		DialogFragment df = new DialogFragment() {
@@ -329,12 +577,16 @@ public class PreferencesActivity extends Activity {
 	}
 
 	protected void removeDirector(int position) {
-		directorAdapter.deleteView(position);
+		mMovieDataAdapter.removeDirector((RatablePerson) directorAdapter
+				.getItem(position));
+		directorAdapter.remove(directorAdapter.getItem(position));
 		directorAdapter.notifyDataSetChanged();
 	}
 
 	protected void removeActor(int position) {
-		actorAdapter.deleteView(position);
+		mMovieDataAdapter.removeActor((RatablePerson) actorAdapter
+				.getItem(position));
+		actorAdapter.remove(actorAdapter.getItem(position));
 		actorAdapter.notifyDataSetChanged();
 	}
 
@@ -400,12 +652,10 @@ public class PreferencesActivity extends Activity {
 					Toast.makeText(getActivity(),
 							"You didn't enter in a name, silly!\n  Try again.",
 							Toast.LENGTH_SHORT).show();
-
 				}
-
 			}
-
 		};
+
 		String tag;
 		if (isAct) {
 			tag = "add actor dialog";
@@ -418,10 +668,12 @@ public class PreferencesActivity extends Activity {
 
 	protected void addPerson(RatablePerson person, boolean isActor) {
 		if (isActor) {
-			actorAdapter.addView(person);
+			mMovieDataAdapter.addActor(person);
+			actorAdapter.add(person);
 			actorAdapter.notifyDataSetChanged();
 		} else {
-			directorAdapter.addView(person);
+			mMovieDataAdapter.addDirector(person);
+			directorAdapter.add(person);
 			directorAdapter.notifyDataSetChanged();
 		}
 	}
@@ -434,7 +686,63 @@ public class PreferencesActivity extends Activity {
 	}
 
 	private void updateMPAAs() {
-		// TODO Auto-generated method stub
+		selectedMPAAAdapter.notifyDataSetChanged();
+		ArrayList<MPAA> stuff = new ArrayList<MPAA>();
+		mMovieDataAdapter.readMPAAs(stuff);
+
+		// for (MPAA mpaa : stuff) {
+		// Log.d("printing mpaas",
+		// mpaa.getName() + "  :       " + mpaa.getPreference());
+		// }
+		for (MPAA mpaa : mpaaList) {
+			mMovieDataAdapter.updateMPAA(mpaa);
+		}
+	}
+
+	private void updatePlatforms() {
+		selectedPlatformAdapter.notifyDataSetChanged();
+		for (Platform platform : platformList) {
+			mMovieDataAdapter.updatePlatform(platform);
+		}
+	}
+
+	private void clearAllPreferences() {
+		mMovieDataAdapter.clearPreferences();
+
+		actorList.clear();
+		directorList.clear();
+		selectedGenreList.clear();
+		selectedPlatformList.clear();
+		selectedMPAAList.clear();
+		mpaaList.clear();
+		platformList.clear();
+
+		genreList = (ArrayList<Genre>) new TMDBMovieRecommender().getGenres();
+		mMovieDataAdapter.addGenres(genreList);
+
+		mpaaList = new ArrayList<MPAA>();
+		mpaaList.add(new MPAA("G", 0));
+		mpaaList.add(new MPAA("PG", 0));
+		mpaaList.add(new MPAA("PG-13", 0));
+		mpaaList.add(new MPAA("R", 0));
+		mpaaList.add(new MPAA("NC-17", 0));
+		mMovieDataAdapter.addMPAAs(mpaaList);
+
+		platformList.add(new Platform("RedBox", 0));
+		platformList.add(new Platform("HULU", 0));
+		platformList.add(new Platform("In Theatres", 0));
+		platformList.add(new Platform("Google Play", 0));
+		platformList.add(new Platform("Amazon Prime", 0));
+		platformList.add(new Platform("YouTube", 0));
+		platformList.add(new Platform("Netflix", 0));
+		mMovieDataAdapter.addPlatforms(platformList);
+
+		actorAdapter.notifyDataSetChanged();
+		directorAdapter.notifyDataSetChanged();
+		selectedGenreAdapter.notifyDataSetChanged();
+		selectedMPAAAdapter.notifyDataSetChanged();
+		selectedPlatformAdapter.notifyDataSetChanged();
 
 	}
+
 }

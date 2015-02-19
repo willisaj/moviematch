@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.os.Parcelable;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -60,12 +61,13 @@ public class RatableRowAdapter extends BaseAdapter {
 		if (convertView == null) {
 			// make one
 			rv = new TextView(mContext);
+			rv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
 		} else {
 			// use the one passed in
 			rv = (TextView) convertView;
 		}
 		// customize it
-		rv.setText(mPeople.get(position).getName());
+		rv.setText(mPeople.get(position).toString());
 		// rv.setRating(mPeople.get(position).getRating());
 		return rv;
 	}

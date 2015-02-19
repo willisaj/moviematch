@@ -54,4 +54,9 @@ public class RatablePerson implements Parcelable {
 		}
 	};
 
+	@Override
+	public String toString() {
+		return mName + " :   " + rating + "/5";
+	}
+
 }

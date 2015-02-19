@@ -50,6 +50,11 @@ public class Movie implements Parcelable {
 		this.mTitle = title;
 	}
 
+	public Movie(String title, int mID) {
+		this.mTitle = title;
+		this.mTmdbId = mID;
+	}
+
 	public Movie(String title, String director, List<String> actors,
 			List<Genre> genres) {
 		mTitle = title;

@@ -17,4 +17,8 @@ public class SimpleMovie {
 		return mID;
 	}
 
+	@Override
+	public String toString() {
+		return mName;
+	}
 }
