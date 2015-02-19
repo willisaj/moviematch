@@ -28,6 +28,7 @@ public class MovieComparator implements Comparator<Movie> {
 		
 		actors();
 		directors();
+		genres();
 		
 		if (leftMovie.getDirector().equals("Tim Burton")) {
 			Log.d("MOVIEMATCH", "MOdded value: " + leftScore);
@@ -41,7 +42,7 @@ public class MovieComparator implements Comparator<Movie> {
 		
 		return -1;
 	}
-	
+
 	private void actors() {
 		for (RatablePerson actor : mPreferences.getActors()) {
 			if (left.getActors().contains(actor.getName())) {
@@ -70,6 +71,22 @@ public class MovieComparator implements Comparator<Movie> {
 			if (right.getDirector().equals(director.getName())) {
 				double moddedValue = director.getRating() - 2.5;
 				rightScore += moddedValue * 2;
+			}
+		}
+	}
+	
+
+	
+	private void genres() {
+		for (Genre genre : left.getGenres()) {
+			if (mPreferences.containGenres(genre)) {
+				leftScore += 3.5;
+			}
+		}
+		
+		for (Genre genre : right.getGenres()) {
+			if (mPreferences.containGenres(genre)) {
+				rightScore += 3.5;
 			}
 		}
 	}

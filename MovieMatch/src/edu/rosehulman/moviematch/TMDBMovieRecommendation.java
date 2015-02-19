@@ -22,6 +22,8 @@ public class TMDBMovieRecommendation implements IMovieRecommendation {
 	private int mDirectorId = 0;
 	private int mGenreId = 0;
 	
+	private String mDirectorName;
+	
 	private String mUrl;
 
 	public TMDBMovieRecommendation(String baseUrl, String apiKey) {
@@ -66,6 +68,12 @@ public class TMDBMovieRecommendation implements IMovieRecommendation {
 				String title = jsonMovie.getString("title");
 				List<String> actors = new TMDBLookup(mBaseUrl, mApiKey).getActors(movieId);
 				String director = new TMDBLookup(mBaseUrl, mApiKey).getDirector(movieId);
+				//Make sure the director wasn't counted as the producer
+				if (mDirectorName != null) {
+					if (!mDirectorName.equals(director)) {
+						continue;
+					}
+				}
 				Movie movie = new Movie(title, director, actors);
 				movie.setTmdbId(movieId);
 				
@@ -98,6 +106,7 @@ public class TMDBMovieRecommendation implements IMovieRecommendation {
 
 	@Override
 	public IMovieRecommendation withDirector(String director) {
+		mDirectorName = director;
 		mDirectorId = new TMDBLookup(mBaseUrl, mApiKey).getPersonId(director);
 		return this;
 	}

@@ -113,9 +113,7 @@ public class MainActivity extends Activity implements OnClickListener {
 
 		List<Movie> movies = recommendation.getMovies();
 		
-		Preferences preferences = new Preferences();
-		//preferences.addActor(new RatablePerson("Vincent Price", 5));
-		//preferences.addDirector(new RatablePerson("Tim Burton", 1));
+		Preferences preferences = Preferences.getPreferencesForUser("willisaj");
 		
 		Collections.sort(movies, new MovieComparator(preferences));
 
