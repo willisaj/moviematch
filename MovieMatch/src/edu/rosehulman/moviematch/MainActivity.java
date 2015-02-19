@@ -1,6 +1,7 @@
 package edu.rosehulman.moviematch;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import android.app.Activity;
@@ -108,6 +109,10 @@ public class MainActivity extends Activity implements OnClickListener {
 		}
 
 		List<Movie> movies = recommendation.getMovies();
+
+		Preferences preferences = Preferences.getPreferencesForUser("willisaj");
+
+		Collections.sort(movies, new MovieComparator(preferences));
 
 		intent.putExtra(KEY_TITLE, "Recommendations");
 		intent.putExtra(KEY_MOVIE_LIST, (ArrayList<Movie>) movies);

@@ -45,6 +45,7 @@ public class MovieProfileActivity extends Activity implements OnClickListener,
 	private TextView mRTScoreView;
 
 	private Button mPurchaseGooglePlayButton;
+	private Button mPurchaseAmazonButton;
 
 	private Button mWatchTrailerButton;
 	private MovieDataAdapter mMovieDataAdapter;
@@ -96,17 +97,35 @@ public class MovieProfileActivity extends Activity implements OnClickListener,
 			mRTScoreView.setText(mMovie.getRTScore() + "%");
 		}
 
+		// Google Play
 		mPurchaseGooglePlayButton = (Button) findViewById(R.id.purchase_google_play_button);
-		mPurchaseGooglePlayButton.setOnClickListener(new OnClickListener() {
+		if (mMovie.getGooglePlayPurchaseUrl() != null) {
+			mPurchaseGooglePlayButton.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri
+							.parse(mMovie.getGooglePlayPurchaseUrl()));
+					startActivity(browserIntent);
+				}
+			});
+		} else {
+			mPurchaseGooglePlayButton.setVisibility(View.GONE);
+		}
 
-			@Override
-			public void onClick(View v) {
-				Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri
-						.parse(mMovie.getGooglePlayPurchaseUrl()));
-				startActivity(browserIntent);
-			}
-
-		});
+		// Amazon
+		mPurchaseAmazonButton = (Button) findViewById(R.id.purchase_amazon_button);
+		if (mMovie.getAmazonPurchaseUrl() != null) {
+			mPurchaseAmazonButton.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri
+							.parse(mMovie.getAmazonPurchaseUrl()));
+					startActivity(browserIntent);
+				}
+			});
+		} else {
+			mPurchaseAmazonButton.setVisibility(View.GONE);
+		}
 
 		mWatchTrailerButton = (Button) findViewById(R.id.watch_trailer_button);
 		mWatchTrailerButton.setOnClickListener(new OnClickListener() {

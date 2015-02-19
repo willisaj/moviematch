@@ -44,7 +44,8 @@ public class Movie implements Parcelable {
 	private int mRTScore;
 
 	private String mGooglePlayPurchaseUrl;
-
+	private String mAmazonPurchaseUrl;
+	
 	@Deprecated
 	public Movie(String title) {
 		this.mTitle = title;
@@ -88,6 +89,7 @@ public class Movie implements Parcelable {
 		mTrailerUrl = in.readString();
 
 		mGooglePlayPurchaseUrl = in.readString();
+		mAmazonPurchaseUrl = in.readString();
 	}
 
 	@Override
@@ -111,6 +113,7 @@ public class Movie implements Parcelable {
 		dest.writeString(mTrailerUrl);
 
 		dest.writeString(mGooglePlayPurchaseUrl);
+		dest.writeString(mAmazonPurchaseUrl);
 	}
 
 	public String getSummaryString() {
@@ -267,6 +270,14 @@ public class Movie implements Parcelable {
 
 	public void setGooglePlayPurchaseUrl(String googlePlayPurchaseUrl) {
 		this.mGooglePlayPurchaseUrl = googlePlayPurchaseUrl;
+	}
+	
+	public String getAmazonPurchaseUrl() {
+		return mAmazonPurchaseUrl;
+	}
+
+	public void setAmazonPurchaseUrl(String amazonPurchaseUrl) {
+		this.mAmazonPurchaseUrl = amazonPurchaseUrl;
 	}
 
 }
