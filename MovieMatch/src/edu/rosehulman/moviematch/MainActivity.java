@@ -23,7 +23,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 import com.appspot.willisaj_movie_match.moviematch.model.Account;
 
 public class MainActivity extends Activity implements OnClickListener {
@@ -52,7 +51,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		// Genre Spinner
 		mGenreSpinner = (Spinner) findViewById(R.id.genre_spinner);
 		List<Genre> genres = new TMDBMovieRecommender().getGenres();
-		genres.add(0, new Genre(getString(R.string.genre_hint), 0));
+		genres.add(0, new Genre(getString(R.string.genre_hint), 0, 0));
 		ArrayAdapter<Genre> genreAdapter = new ArrayAdapter<Genre>(this,
 				android.R.layout.simple_spinner_item, genres);
 		genreAdapter
@@ -124,9 +123,9 @@ public class MainActivity extends Activity implements OnClickListener {
 		}
 
 		List<Movie> movies = recommendation.getMovies();
-		
+
 		Preferences preferences = Preferences.getPreferencesForUser("willisaj");
-		
+
 		Collections.sort(movies, new MovieComparator(preferences));
 
 		intent.putExtra(KEY_TITLE, "Recommendations");
@@ -135,62 +134,13 @@ public class MainActivity extends Activity implements OnClickListener {
 		this.startActivity(intent);
 	}
 
-	protected void startMovieListActivity(boolean isRecommendation) {
-		Intent intent = new Intent(this, MovieListActivity.class);
-		// TODO make a central state that initializes other classes?
-		// TODO database.getArrayOfmovies();
+	protected void startMovieWishListActivity() {
+		Intent intent;
 
-		// ArrayList<String> actorsOne = new ArrayList<String>();
-		// actorsOne.add("Jimmy Kimmel");
-		// actorsOne.add("That one guy from American Grafitti");
-		// actorsOne.add("Carrie Grant");
-		ArrayList<String> actorsTwo = new ArrayList<String>();
-		actorsTwo.add("Daniel Radcliffe");
-		actorsTwo.add("Emma Stone");
-		actorsTwo.add("Rupert Grint");
-
-		List<Genre> genresAll = new TMDBMovieRecommender().getGenres();
-		// ArrayList<Genre> genresOne = new ArrayList<Genre>();
-		ArrayList<Genre> genresTwo = new ArrayList<Genre>();
-		for (Genre genre : genresAll) {
-			if ((genre.toString()).equals("Romance")) {
-				genresTwo.add(genre);
-			}
-		}
-
-		// genresOne.add("Action");
-		// genresOne.add("Amazing");
-		// genresOne.add("Sci-Fi");
-		//
-		// genresTwo.add("Romance");
-		// genresTwo.add("Zombie Comedy");
-		// genresTwo.add("Animated");
-
-		// ArrayList<Movie> moviesOne = new ArrayList<Movie>();
-		// moviesOne.add(new Movie("A New Hope", "George Lucas", actorsOne));
-		// moviesOne.add(new Movie("The Empire Strikes Back", "George Lucas",
-		// actorsOne));
-		// moviesOne
-		// .add(new Movie("Return of the Jedi", "George Lucas", actorsOne));
-
-		ArrayList<Movie> moviesTwo = new ArrayList<Movie>();
-		moviesTwo.add(new Movie("The Sorcerer's Stone", "Stephen Spielberg",
-				actorsTwo, genresTwo));
-		moviesTwo.add(new Movie("The Chamber of Secrets", "Oprah Winfrey",
-				actorsTwo, genresTwo));
-		moviesTwo.add(new Movie("The Prisoner of Azkaban", "Barbra Streissand",
-				actorsTwo, genresTwo));
-
-		if (isRecommendation) {
-			intent.putExtra(KEY_TITLE, "Recommendations");
-			intent.putExtra(KEY_MOVIE_LIST, moviesTwo);
-		} else {
-			intent.putExtra(KEY_TITLE, "Wish List");
-			intent.putExtra(KEY_MOVIE_LIST, moviesTwo);
-		}
+		intent = new Intent(this, MovieWishListActivity.class);
+		intent.putExtra(KEY_TITLE, "Wish List");
 
 		this.startActivity(intent);
-
 	}
 
 	@Override
@@ -198,7 +148,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		if (v.getId() == R.id.recommend_movie_button) {
 			startRecommendationActivity();
 		} else if (v.getId() == R.id.wishlist_button) {
-			startMovieListActivity(false);
+			startMovieWishListActivity();
 		} else {
 			Log.d("", "CRITICAL ERROR IN MAINACTIVITY: onClick()");
 		}

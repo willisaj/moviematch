@@ -7,35 +7,33 @@ import android.os.Parcelable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.TextView;
 
-public class GenreAdapter extends BaseAdapter {
-	ArrayList<Genre> mGenres;
+public class PlatformAdapter extends BaseAdapter {
+	ArrayList<Platform> mPlatforms;
 	private Context mContext;
 
-	public GenreAdapter(Context context, ArrayList<Genre> genreList) {
+	public PlatformAdapter(Context context, ArrayList<Platform> platformList) {
 		mContext = context;
 
 		// if (genreList == null) {
 		// mGenres = new ArrayList<Genre>();
 		// } else {
-		mGenres = genreList;
+		mPlatforms = platformList;
 		// }
 	}
 
 	@Override
 	public int getCount() {
-		return mGenres.size();
+		return mPlatforms.size();
 	}
 
 	@Override
 	public Object getItem(int position) {
-		return mGenres.get(position);
+		return mPlatforms.get(position);
 	}
 
 	@Override
 	public long getItemId(int position) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
@@ -50,17 +48,17 @@ public class GenreAdapter extends BaseAdapter {
 			cv = (CheckableView) convertView;
 		}
 		// customize it
-		if (mGenres.get(position).getPreference() == 1) {
+		if (mPlatforms.get(position).getPreference() == 1) {
 			cv.setSelected();
-		}else{
+		} else {
 			cv.setUnselected();
 		}
-		cv.setName(mGenres.get(position).getName());
+		cv.setName(mPlatforms.get(position).getName());
 		return cv;
 	}
 
 	public ArrayList<? extends Parcelable> getArrayList() {
-		return mGenres;
+		return mPlatforms;
 	}
 
 }

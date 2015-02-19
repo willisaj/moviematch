@@ -29,8 +29,16 @@
     <string name="director_add_dialog">Add a director</string>
     <string name="edit_genre_title">Select or deselect genres</string>
     <string name="edit_mpaa_title">Select or deselect desired MPAA ratings</string>
+    <string name="edit_platform_title">Select or deselect desired MPAA ratings</string>
     <string name="mpaas">MPAA ratings:</string>
     <string name="platforms">Platforms:</string>
+    <string name="menu_clear_preferences">Clear Preferences</string>
+    <string name="delete_actor_title">Delete Actor</string>
+    <string name="delete_actor_message">By long-clicking this Actor, you have selected to delete them.  Are you sure?</string>
+    <string name="delete_director_title">Delete Director</string>
+    <string name="delete_director_message">By long-clicking this Director, you have selected to delete them.  Are you sure?</string>
+    <string name="delete_preferences_title">Clear Preferences</string>
+    <string name="delete_preferences_message">Are you sure that you would like to clear all of your preferences?  This cannot be undone.</string>
     <string name="login">Login</string>
     <string name="cancel">Cancel</string>
     <string name="username_hint">Username</string>
@@ -50,5 +58,6 @@
     <string name="cd_rt_rating">The icon for the RottenTomatoes Critics Approval Rating</string>
     <string name="title_activity_trailer">TrailerActivity</string>
     <string name="title_activity_preferences">Preferences</string>
+    <string name="title_activity_movie_wish_list">MovieWishListActivity</string>
 
 </resources>

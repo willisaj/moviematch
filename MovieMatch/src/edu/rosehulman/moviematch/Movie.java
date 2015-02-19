@@ -45,10 +45,15 @@ public class Movie implements Parcelable {
 
 	private String mGooglePlayPurchaseUrl;
 	private String mAmazonPurchaseUrl;
-
+	
 	@Deprecated
 	public Movie(String title) {
 		this.mTitle = title;
+	}
+
+	public Movie(String title, int mID) {
+		this.mTitle = title;
+		this.mTmdbId = mID;
 	}
 
 	public Movie(String title, String director, List<String> actors,

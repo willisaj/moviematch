@@ -1,22 +1,17 @@
 package edu.rosehulman.moviematch;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.MediaController;
 import android.widget.RatingBar;
 import android.widget.RatingBar.OnRatingBarChangeListener;
 import android.widget.TextView;
-import android.widget.VideoView;
 
 public class MovieProfileActivity extends Activity implements OnClickListener,
 		OnRatingBarChangeListener {
@@ -53,11 +48,15 @@ public class MovieProfileActivity extends Activity implements OnClickListener,
 	private Button mPurchaseAmazonButton;
 
 	private Button mWatchTrailerButton;
+	private MovieDataAdapter mMovieDataAdapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_movie_profile);
+
+		mMovieDataAdapter = new MovieDataAdapter(this);
+		mMovieDataAdapter.open();
 
 		mMovie = (Movie) getIntent().getParcelableExtra(KEY_MOVIE);
 		new RTLookup().fillInMovieInfo(mMovie);
@@ -137,8 +136,7 @@ public class MovieProfileActivity extends Activity implements OnClickListener,
 		});
 
 		this.rating = getIntent().getDoubleExtra(KEY_USER_RATING, 0);
-		this.isOnWishList = getIntent().getBooleanExtra(KEY_IS_ON_WISHLIST,
-				false);
+		this.isOnWishList = mMovieDataAdapter.isOnWishList(mMovie.getTmdbId());
 		double metacriticRating = getIntent().getDoubleExtra(
 				KEY_METACRITIC_RATING, 0);
 
@@ -151,11 +149,11 @@ public class MovieProfileActivity extends Activity implements OnClickListener,
 		this.wishListButton = (Button) findViewById(R.id.wishListButton);
 
 		if (this.isOnWishList) {
-			this.wishListButton.setBackgroundColor(Color.GREEN);
-			this.wishListButton.setText(ADD_TO_WISHLIST);
-		} else {
 			this.wishListButton.setBackgroundColor(Color.RED);
 			this.wishListButton.setText(REMOVE_FROM_WISHLIST);
+		} else {
+			this.wishListButton.setBackgroundColor(Color.GREEN);
+			this.wishListButton.setText(ADD_TO_WISHLIST);
 		}
 		this.wishListButton.setOnClickListener(this);
 
@@ -175,19 +173,21 @@ public class MovieProfileActivity extends Activity implements OnClickListener,
 	@Override
 	public void onClick(View v) {
 		toggleMovieOnWishList();
-
 	}
 
 	private void toggleMovieOnWishList() {
-		// TODO add communication with database class
 		if (this.isOnWishList) {
-			this.wishListButton.setBackgroundColor(Color.RED);
-			this.wishListButton.setText(REMOVE_FROM_WISHLIST);
-			this.isOnWishList = false;
-		} else {
 			this.wishListButton.setBackgroundColor(Color.GREEN);
 			this.wishListButton.setText(ADD_TO_WISHLIST);
+			this.isOnWishList = false;
+			mMovieDataAdapter.removeWishMovie(mMovie.getTmdbId());
+		} else {
+			this.wishListButton.setBackgroundColor(Color.RED);
+			this.wishListButton.setText(REMOVE_FROM_WISHLIST);
 			this.isOnWishList = true;
+			SimpleMovie movieToAdd = new SimpleMovie(mMovie.getTmdbId(),
+					mMovie.getTitle());
+			mMovieDataAdapter.addWishMovie(movieToAdd);
 		}
 
 	}
@@ -197,7 +197,6 @@ public class MovieProfileActivity extends Activity implements OnClickListener,
 			boolean fromUser) {
 		// TODO communicate this change to the database
 		this.rating = rating;
-
 	}
 
 }

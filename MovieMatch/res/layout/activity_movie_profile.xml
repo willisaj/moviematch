@@ -5,7 +5,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:padding="15dp" >
 
         <TextView
             android:id="@+id/movie_title_view"
@@ -140,10 +141,10 @@
                 android:id="@+id/purchase_google_play_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/purchase_google_play"
-                android:drawableLeft="@drawable/google_play_store_48" />
-            
-             <Button
+                android:drawableLeft="@drawable/google_play_store_48"
+                android:text="@string/purchase_google_play" />
+
+            <Button
                 android:id="@+id/purchase_amazon_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

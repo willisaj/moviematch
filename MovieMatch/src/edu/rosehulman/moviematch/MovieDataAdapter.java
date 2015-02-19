@@ -179,15 +179,6 @@ public class MovieDataAdapter {
 			db.execSQL(CREATE_PLATFORMS_STATEMENT);
 			db.execSQL(CREATE_SEEN_MOVIES_STATEMENT);
 			db.execSQL(CREATE_WISHLIST_STATEMENT);
-			
-			//TODO implement these methods
-			// addMPAAS(((MainActivity) context).getMPAAs());
-			// addGenres(((MainActivity) context).getGenres());
-			// addPlatforms(((MainActivity) context).getPlatforms());
-			
-			
-			
-			
 
 		}
 
@@ -206,6 +197,20 @@ public class MovieDataAdapter {
 
 		}
 
+		public void clearPreferences(SQLiteDatabase db) {
+			db.execSQL(DROP_ACTORS_STATEMENT);
+			db.execSQL(DROP_DIRECTORS_STATEMENT);
+			db.execSQL(DROP_GENRES_STATEMENT);
+			db.execSQL(DROP_MPAA_STATEMENT);
+			db.execSQL(DROP_PLATFORMS_STATEMENT);
+
+			db.execSQL(CREATE_ACTORS_STATEMENT);
+			db.execSQL(CREATE_DIRECTORS_STATEMENT);
+			db.execSQL(CREATE_GENRES_STATEMENT);
+			db.execSQL(CREATE_MPAA_STATEMENT);
+			db.execSQL(CREATE_PLATFORMS_STATEMENT);
+		}
+
 	}
 
 	private SQLiteOpenHelper mOpenHelper;
@@ -221,6 +226,10 @@ public class MovieDataAdapter {
 
 	public void close() {
 		mDatabase.close();
+	}
+
+	public void clearPreferences() {
+		((MovieDBHelper) mOpenHelper).clearPreferences(mDatabase);
 	}
 
 	public void addActor(RatablePerson actor) {
@@ -241,7 +250,7 @@ public class MovieDataAdapter {
 
 	public void updateActor(RatablePerson actor) {
 		ContentValues row = getContentValuesFromActor(actor);
-		String selection = KEY_ACTOR_NAME + " = " + actor.getName();
+		String selection = KEY_ACTOR_NAME + " = '" + actor.getName() + "'";
 		// row is row to add, selection is rows to replace with row
 		mDatabase.update(ACTORS_TABLE_NAME, row, selection, null);
 	}
@@ -291,7 +300,8 @@ public class MovieDataAdapter {
 
 	public void updateDirector(RatablePerson director) {
 		ContentValues row = getContentValuesFromDirector(director);
-		String selection = KEY_DIRECTOR_NAME + " = " + director.getName();
+		String selection = KEY_DIRECTOR_NAME + " = '" + director.getName()
+				+ "'";
 		// row is row to add, selection is rows to replace with row
 		mDatabase.update(DIRECTORS_TABLE_NAME, row, selection, null);
 	}
@@ -382,11 +392,28 @@ public class MovieDataAdapter {
 		} while (cursor.moveToNext());
 	}
 
-	public boolean removeWishMovie(SimpleMovie movie) {
+	public boolean isOnWishList(int movieId) {
+		ArrayList<SimpleMovie> tempMovies = new ArrayList<SimpleMovie>();
+		Log.d("Printing wishlist", "Woot off!");
+		readWishMovies(tempMovies);
+		for (SimpleMovie movie : tempMovies) {
+			Log.d("Printing wishlist", movie.getName());
+			Log.d("Printing wishlist", "IDs: " + movie.getId() + "---"
+					+ movieId);
+			if (movie.getId() == movieId) {
+				Log.d("Printing wishlist", "Found movie: " + movie.getName());
+
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean removeWishMovie(int movieID) {
 
 		String selection = KEY_WISHLIST_ID + " = ?";
 		return mDatabase.delete(WISHLIST_TABLE_NAME, selection,
-				new String[] { movie.getId() + "" }) > 0;
+				new String[] { movieID + "" }) > 0;
 	}
 
 	public ContentValues getContentValuesFromWishMovie(SimpleMovie movie) {
@@ -475,7 +502,7 @@ public class MovieDataAdapter {
 
 	public void updateMPAA(MPAA rating) {
 		ContentValues row = getContentValuesFromMPAA(rating);
-		String selection = KEY_MPAA_NAME + " = " + rating.getName();
+		String selection = KEY_MPAA_NAME + " = '" + rating.getName() + "'";
 		// row is row to add, selection is rows to replace with row
 		mDatabase.update(MPAA_TABLE_NAME, row, selection, null);
 	}
@@ -520,7 +547,8 @@ public class MovieDataAdapter {
 
 	public void updatePlatform(Platform platform) {
 		ContentValues row = getContentValuesFromPlatform(platform);
-		String selection = KEY_PLATFORM_NAME + " = " + platform.getName();
+		String selection = KEY_PLATFORM_NAME + " = '" + platform.getName()
+				+ "'";
 		// row is row to add, selection is rows to replace with row
 		mDatabase.update(PLATFORMS_TABLE_NAME, row, selection, null);
 	}
